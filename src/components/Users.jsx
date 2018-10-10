@@ -5,7 +5,9 @@ import {
   messageToServer
 } from '../socket-io-client/messageToServer';
 
-class Messages extends Component {
+import UserList from './UserList';
+
+class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,28 +54,32 @@ class Messages extends Component {
     return arrayOfMessages;
   }
 
-  renderPizzas() {
+  renderUsers() {
     return (
-      <div className="row">
-        <div className="col-3">
-          <h3>MSN messenger</h3>
-        </div>
-        <div className="col-9">
-          {this.state && this.getMessages(this.state.messages)}
-          <div className="row fixed-bottom">
-            <div className="col-3" />
-            <div className="col-9">
-              <form onSubmit={this.onSubmit}>
-                <label>
-                  Your message:
-                  <input
-                    type="text"
-                    value={this.state && this.state.inputText}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <input className="btn btn-success" type="submit" value="Send" />
-              </form>
+      <div className="card-column rounded">
+        <div className="card" style={{ background: 'lightblue' }}>
+          <div className="card-body row">
+            <img
+              className="card-img-left col-4 profile_picture rounded"
+              src="https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg"
+              height="90"
+              width="100"
+              alt="Card image cap"
+              style={{
+                borderStyle: 'solid',
+                background: 'white'
+              }}
+            />
+            <div className="card-title col-8">
+              <h4>John Doe</h4>
+              <p
+                className="card-text col-8"
+                style={{
+                  padding: 0
+                }}
+              >
+                <i>Feeling good!</i>
+              </p>
             </div>
           </div>
         </div>
@@ -82,12 +88,13 @@ class Messages extends Component {
   }
 
   render() {
-    return <div>{this.renderPizzas()}</div>;
+    return (
+      <div>
+        {this.renderUsers()}
+        <UserList />
+      </div>
+    );
   }
 }
 
-function mapStateToProps({ pizzas }) {
-  return { pizzas };
-}
-
-export default Messages;
+export default Users;

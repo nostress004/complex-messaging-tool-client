@@ -5,6 +5,8 @@ import {
   messageToServer
 } from '../socket-io-client/messageToServer';
 
+import MessageLayout from './MessageLayout';
+
 class Messages extends Component {
   constructor(props) {
     super(props);
@@ -52,9 +54,9 @@ class Messages extends Component {
     return arrayOfMessages;
   }
 
-  renderPizzas() {
+  renderMessages() {
     return (
-      <div className="row">
+      <div className="row" style={{ height: '100%' }}>
         <div className="col-3">
           <h2>CMT</h2>
         </div>
@@ -81,13 +83,13 @@ class Messages extends Component {
     );
   }
 
-  render() {
-    return <div>{this.renderPizzas()}</div>;
+  renderLayout() {
+    return <MessageLayout />;
   }
-}
 
-function mapStateToProps({ pizzas }) {
-  return { pizzas };
+  render() {
+    return <div style={{ padding: 0 }}>{this.renderMessages()}</div>;
+  }
 }
 
 export default Messages;

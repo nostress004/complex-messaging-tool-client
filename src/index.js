@@ -29,7 +29,6 @@ const createMessageWindow = async () => {
     hash: 'messages'
   });
 
-  console.log(startUrl);
   // and load the index.html of the app.
 
   //messageWindow.loadURL(`file://${__dirname}/index.html`);
@@ -66,7 +65,6 @@ const createUsersWindow = async () => {
     hash: 'users'
   });
 
-  console.log(startUrl);
   // and load the index.html of the app.
 
   //messageWindow.loadURL(`file://${__dirname}/index.html`);

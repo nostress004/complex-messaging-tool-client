@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserPicture from './UserPicture';
 
-class TextArea extends Component {
+class UserCard extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -32,4 +32,4 @@ class TextArea extends Component {
   }
 }
 
-export default TextArea;
+export default UserCard;
