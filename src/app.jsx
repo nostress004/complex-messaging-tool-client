@@ -26,7 +26,7 @@ export default class App extends React.Component {
   render() {
     return (
       <HashRouter>
-        <div>
+        <div className="h-100">
           <Route exact path="/messages" component={MessageLayout} />
           <Route exact path="/users" component={Users} />
         </div>

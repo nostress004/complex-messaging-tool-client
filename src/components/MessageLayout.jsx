@@ -14,7 +14,7 @@ class MessageLayout extends Component {
   render() {
     return (
       <div
-        className="container-fluid"
+        className="container-fluid h-100"
         style={{ height: '100%', padding: 0, margin: 5 }}
       >
         <div className="row" style={{ margin: 10 }}>
@@ -40,16 +40,13 @@ class MessageLayout extends Component {
             <UserCard picture={false} />
           </div>
         </div>
-        <div className="row" style={{ height: '80%' }}>
+        <div className="row" style={{ height: '40%' }}>
           <div className="offset-lg-3 col-9">
             <Messages />
           </div>
         </div>
 
-        <div
-          className="row align-items-center fixed-bottom"
-          style={{ marginBottom: 5 }}
-        >
+        <div className="row" style={{ marginBottom: 5 }}>
           <div className="col-3">
             <UserPicture picture={true} size={300} />
           </div>

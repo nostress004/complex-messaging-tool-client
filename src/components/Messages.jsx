@@ -57,9 +57,6 @@ class Messages extends Component {
   renderMessages() {
     return (
       <div className="row" style={{ height: '100%' }}>
-        <div className="col-3">
-          <h2>CMT</h2>
-        </div>
         <div className="col-9">
           {this.state && this.getMessages(this.state.messages)}
           <div className="row fixed-bottom">
