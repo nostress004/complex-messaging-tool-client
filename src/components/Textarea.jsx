@@ -1,34 +1,75 @@
 import React, { Component } from 'react';
-import UserPicture from './UserPicture';
+import { Link } from 'react-router-dom';
+import { messageToServer } from '../socket-io-client/messageToServer';
+import { Emoji, Picker } from 'emoji-mart';
 
 class TextArea extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputText: ''
+    };
 
-    this.state = { picture: props.picture };
+    this.onSubmit = this.onSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  render() {
+  onSubmit(event) {
+    if (!this.state.inputText || this.state.inputText.length <= 0) {
+      return;
+    }
+    messageToServer(this.state.inputText);
+    this.setState({ inputText: '' });
+    event.preventDefault();
+  }
+
+  handleChange(event) {
+    this.setState({ inputText: event.target.value });
+  }
+
+  renderTextBox() {
     return (
-      <div className="card-column rounded">
-        <div className="card" style={{ background: 'lightblue' }}>
-          <div className="card-body row">
-            <UserPicture hidden={!this.state.picture} />
-            <div className="card-title col-8">
-              <h4>John Doe (Available)</h4>
-              <p
-                className="card-text col-8"
-                style={{
-                  padding: 0
-                }}
-              >
-                <i>Feeling good!</i>
-              </p>
-            </div>
-          </div>
+      <div className="row" style={{ height: '100%' }}>
+        <form onSubmit={this.onSubmit}>
+          <label>
+            Your message:
+            <input
+              type="textarea"
+              value={this.state && this.state.inputText}
+              onChange={this.handleChange}
+            />
+          </label>
+          <input className="btn btn-success" type="submit" value="Send" />
+        </form>
+      </div>
+    );
+  }
+
+  renderTextBox2() {
+    return (
+      <div
+        className="card rounded"
+        style={{ background: 'lightblue', height: '10%' }}
+      >
+        <form className="card-body row" onSubmit={this.onSubmit}>
+          <label className="col-2">Your message:</label>
+          <input
+            className="col-8"
+            type="textarea"
+            value={this.state && this.state.inputText}
+            onChange={this.handleChange}
+          />
+          <input className="btn btn-success col-2" type="submit" value="Send" />
+        </form>
+        <div className="card-text">
+          <Emoji emoji="santa" set="emojione" size={16} />
         </div>
       </div>
     );
+  }
+
+  render() {
+    return <div style={{ padding: 0 }}>{this.renderTextBox2()}</div>;
   }
 }
 

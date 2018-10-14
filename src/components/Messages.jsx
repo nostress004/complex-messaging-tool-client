@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  messageToClient,
-  messageToServer
-} from '../socket-io-client/messageToServer';
-
-import MessageLayout from './MessageLayout';
+import { messageToClient } from '../socket-io-client/messageToServer';
+import { Emoji } from 'emoji-mart';
 
 class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: '',
       messages: []
     };
 
@@ -21,22 +16,6 @@ class Messages extends Component {
         messages: [...this.state.messages, message]
       });
     });
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  onSubmit(event) {
-    if (!this.state.inputText) {
-      return;
-    }
-    messageToServer(this.state.inputText);
-    this.setState({ inputText: '' });
-    event.preventDefault();
-  }
-
-  handleChange(event) {
-    this.setState({ inputText: event.target.value });
   }
 
   getMessages(messages) {
@@ -59,29 +38,14 @@ class Messages extends Component {
       <div className="row" style={{ height: '100%' }}>
         <div className="col-9">
           {this.state && this.getMessages(this.state.messages)}
-          <div className="row fixed-bottom">
-            <div className="col-3" />
-            <div className="col-9">
-              <form onSubmit={this.onSubmit}>
-                <label>
-                  Your message:
-                  <input
-                    type="text"
-                    value={this.state && this.state.inputText}
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <input className="btn btn-success" type="submit" value="Send" />
-              </form>
-            </div>
-          </div>
+
+          <Emoji emoji="joy" set="emojione" size={32} />
+          <Emoji emoji="joy" set="emojione" size={32} />
+          <Emoji emoji="joy" set="emojione" size={32} />
+          <Emoji emoji="joy" set="emojione" size={32} />
         </div>
       </div>
     );
-  }
-
-  renderLayout() {
-    return <MessageLayout />;
   }
 
   render() {

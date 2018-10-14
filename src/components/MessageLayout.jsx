@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import UserCard from './UserCard';
 import UserPicture from './UserPicture';
 import Messages from './Messages';
+import TextArea from './TextArea';
 
 class MessageLayout extends Component {
   constructor(props, context) {
@@ -40,18 +41,18 @@ class MessageLayout extends Component {
             <UserCard picture={false} />
           </div>
         </div>
-        <div className="row" style={{ height: '40%' }}>
+        <div className="row" style={{ height: '40%', overflow: 'auto' }}>
           <div className="offset-lg-3 col-9">
             <Messages />
           </div>
         </div>
 
-        <div className="row" style={{ marginBottom: 5 }}>
+        <div className="row  align-items-center" style={{ marginBottom: 5 }}>
           <div className="col-3">
             <UserPicture picture={true} size={300} />
           </div>
           <div className="col-9">
-            <UserCard picture={false} />
+            <TextArea picture={false} />
           </div>
         </div>
       </div>
