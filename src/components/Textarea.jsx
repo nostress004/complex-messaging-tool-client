@@ -68,8 +68,43 @@ class TextArea extends Component {
     );
   }
 
+  renderTextBox3() {
+    return (
+      <div
+        className="card rounded"
+        style={{ background: 'lightblue', height: '100%' }}
+      >
+        <form
+          className="card-body"
+          onSubmit={this.onSubmit}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            padding: 5
+          }}
+        >
+          <input
+            type="textarea"
+            rows="4"
+            value={this.state && this.state.inputText}
+            onChange={this.handleChange}
+            style={{ flexBasis: '75%' }}
+          />
+          <input
+            className="btn btn-success "
+            type="submit"
+            value="Send"
+            style={{ flexBasis: '20%', height: '50%', alignSelf: 'center' }}
+          />
+        </form>
+      </div>
+    );
+  }
+
   render() {
-    return <div style={{ padding: 0 }}>{this.renderTextBox2()}</div>;
+    return (
+      <div style={{ padding: 0, height: '100%' }}>{this.renderTextBox3()}</div>
+    );
   }
 }
 

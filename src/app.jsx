@@ -4,6 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { subscribeToTimer } from './socket-io-client/connection';
 import Users from './components/Users';
 import MessageLayout from './components/MessageLayout';
+import MessageFlexBoxLayout from './components/MessageFlexBoxLayout';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -26,8 +27,8 @@ export default class App extends React.Component {
   render() {
     return (
       <HashRouter>
-        <div className="h-100">
-          <Route exact path="/messages" component={MessageLayout} />
+        <div className="main">
+          <Route exact path="/messages" component={MessageFlexBoxLayout} />
           <Route exact path="/users" component={Users} />
         </div>
       </HashRouter>

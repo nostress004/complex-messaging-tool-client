@@ -21,7 +21,7 @@ class UserPicture extends Component {
           style={{
             borderStyle: 'solid',
             background: 'white',
-            width: '100%'
+            width: '85%'
           }}
         />
       </div>
