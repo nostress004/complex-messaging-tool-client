@@ -1,18 +1,28 @@
-import openSocket from 'socket.io-client';
-
+import { callbackify } from 'util';
+import socket from './connect';
 // TODO:move variables to config files
-
-const socket = openSocket('https://safe-crag-14775.herokuapp.com');
-//const socket = openSocket('http://localhost:5000');
-
-function messageToClient(cb) {
-  socket.on('messageToClient', message => cb(null, message));
-  console.log('this is the messageToClient function');
-}
 
 function messageToServer(message) {
   socket.emit('messageToServer', message);
-  console.log('this is the messageToServer function');
+  console.log(`${message} message has been sent to the server`);
 }
 
-export { messageToServer, messageToClient };
+function messageToClient(callBack) {
+  socket.on('messageToClient', message => callBack(null, message));
+  console.log('this is the messageToClient function');
+}
+
+function emitStatusUpdate(status) {
+  socket.emit('updateStatus', status);
+  console.log(`${status} has been sent to the server`);
+}
+
+function onStatusUpdate(callBack) {
+  socket.on('statusUpdated', status => {
+    // TODO: investigate why it wraps itself to an object
+    callBack(null, status.status);
+  });
+  console.log('status recieved');
+}
+
+export { messageToServer, messageToClient, emitStatusUpdate, onStatusUpdate };

@@ -38,9 +38,9 @@ class MessageLayout extends Component {
             <UserCard picture={false} />
           </div>
         </div>
-        <div className="input-container messages-height">
+        <div className="input-container message-height">
           <div className="input-box-1" />
-          <div className="input-box-2" style={{ height: '100%' }}>
+          <div className="message-box">
             <Messages />
           </div>
         </div>

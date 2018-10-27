@@ -20,7 +20,7 @@ const createMessageWindow = async () => {
   // Create the browser window.
   messageWindow = new BrowserWindow({
     title: 'CMT',
-    width: 1024,
+    width: 1280,
     height: 768
   });
 

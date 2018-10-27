@@ -10,12 +10,21 @@ class Messages extends Component {
       messages: []
     };
 
+    this.messagesEnd = React.createRef();
     messageToClient((err, message = 'no message yet') => {
       console.log('called messageToServer');
       this.setState({
         messages: [...this.state.messages, message]
       });
     });
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   getMessages(messages) {
@@ -25,31 +34,28 @@ class Messages extends Component {
 
     const arrayOfMessages = messages.map((message, index) => (
       // Only do this if items have no stable IDs
-      <li key={index}>
-        <b>{new Date(message.time * 100).toLocaleTimeString('en-GB')}</b>:{' '}
-        {message.text}
-      </li>
+      <p style={{ border: 0, margin: 0, padding: 0 }} key={index}>
+        <b>{message.time}</b>: {message.text}
+      </p>
     ));
     return arrayOfMessages;
   }
 
-  renderMessages() {
-    return (
-      <div className="row" style={{ height: '100%' }}>
-        <div className="col-9">
-          {this.state && this.getMessages(this.state.messages)}
+  scrollToBottom() {
+    this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
+  }
 
-          <Emoji emoji="joy" set="emojione" size={32} />
-          <Emoji emoji="joy" set="emojione" size={32} />
-          <Emoji emoji="joy" set="emojione" size={32} />
-          <Emoji emoji="joy" set="emojione" size={32} />
-        </div>
-      </div>
-    );
+  renderMessages() {
+    return <div>{this.state && this.getMessages(this.state.messages)}</div>;
   }
 
   render() {
-    return <div style={{ padding: 0 }}>{this.renderMessages()}</div>;
+    return (
+      <div>
+        {this.renderMessages()}
+        <div ref={this.messagesEnd} />
+      </div>
+    );
   }
 }
 

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+
 import {
   emitStatusUpdate,
   onStatusUpdate
 } from '../socket-io-client/messageToServer';
 
-import UserList from './UserList';
-
-class Users extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,4 +78,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default Login;

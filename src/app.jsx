@@ -1,9 +1,6 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
-
-import { subscribeToTimer } from './socket-io-client/connection';
 import Users from './components/Users';
-import MessageLayout from './components/MessageLayout';
 import MessageFlexBoxLayout from './components/MessageFlexBoxLayout';
 
 export default class App extends React.Component {

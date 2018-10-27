@@ -7,11 +7,13 @@ class TextArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: ''
+      inputText: '',
+      textArea: true
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onEmojiPicker = this.onEmojiPicker.bind(this);
   }
 
   onSubmit(event) {
@@ -27,53 +29,64 @@ class TextArea extends Component {
     this.setState({ inputText: event.target.value });
   }
 
-  renderTextBox() {
-    return (
-      <div className="row" style={{ height: '100%' }}>
-        <form onSubmit={this.onSubmit}>
-          <label>
-            Your message:
-            <input
-              type="textarea"
-              value={this.state && this.state.inputText}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input className="btn btn-success" type="submit" value="Send" />
-        </form>
-      </div>
-    );
+  onEmojiPicker() {
+    this.setState({ textArea: !this.state.textArea });
   }
 
-  renderTextBox2() {
-    return (
-      <div
-        className="card rounded"
-        style={{ background: 'lightblue', height: '10%' }}
-      >
-        <form className="card-body row" onSubmit={this.onSubmit}>
-          <label className="col-2">Your message:</label>
-          <input
-            className="col-8"
-            type="textarea"
-            value={this.state && this.state.inputText}
-            onChange={this.handleChange}
-          />
-          <input className="btn btn-success col-2" type="submit" value="Send" />
-        </form>
-        <div className="card-text">
-          <Emoji emoji="santa" set="emojione" size={16} />
+  getArea() {
+    if (this.state && this.state.textArea === 'undefined') {
+      return;
+    }
+
+    if (this.state.textArea) {
+      return (
+        <input
+          type="textarea"
+          rows="4"
+          value={this.state && this.state.inputText}
+          onChange={this.handleChange}
+          style={{ flexBasis: '75%' }}
+        />
+      );
+    } else if (!this.state.textArea) {
+      return (
+        <div>
+          <Picker perLine={4} style={{ flexBasis: '75%' }} />
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   renderTextBox3() {
     return (
       <div
         className="card rounded"
-        style={{ background: 'lightblue', height: '100%' }}
+        style={{
+          background: 'lightblue',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'row'
+        }}
       >
+        <button
+          className="btn btn-outline-warning"
+          onClick={this.onEmojiPicker}
+          style={{
+            flexBasis: '5%',
+            padding: '0 5px 0 0',
+            margin: 0,
+            alignSelf: 'center',
+            height: '25%',
+            background: 'white'
+          }}
+        >
+          <Emoji
+            emoji="smile"
+            set="emojione"
+            size={24}
+            style={{ alignSelf: 'center' }}
+          />
+        </button>
         <form
           className="card-body"
           onSubmit={this.onSubmit}
@@ -83,18 +96,12 @@ class TextArea extends Component {
             padding: 5
           }}
         >
+          {this.getArea()}
           <input
-            type="textarea"
-            rows="4"
-            value={this.state && this.state.inputText}
-            onChange={this.handleChange}
-            style={{ flexBasis: '75%' }}
-          />
-          <input
-            className="btn btn-success "
+            className="btn btn-success"
             type="submit"
             value="Send"
-            style={{ flexBasis: '20%', height: '50%', alignSelf: 'center' }}
+            style={{ flexBasis: '15%', height: '50%', alignSelf: 'center' }}
           />
         </form>
       </div>
