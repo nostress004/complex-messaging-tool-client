@@ -26,7 +26,7 @@ passport.use(
       callbackURL: '/auth/google/callback'
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log('google strategy');
+      //console.log('google strategy');
       console.log(profile);
       const extistingUser = await User.findOne({ googleID: profile.id });
 
@@ -36,7 +36,12 @@ passport.use(
       }
 
       //we dont have a user with this ID, make a new record
-      const user = await new User({ googleID: profile.id }).save();
+      const user = await new User({
+        googleID: profile.id,
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        photo: profile.photos[0].value
+      }).save();
       done(null, user);
     }
   )

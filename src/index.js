@@ -49,8 +49,8 @@ expressApp.use(passport.initialize());
 expressApp.use(passport.session());
 
 expressApp.get('/login', function(req, res, next) {
-  console.log('1');
-  console.log(res);
+  // console.log('1');
+  // console.log(res);
   passport.authenticate(
     'google',
     {
@@ -60,8 +60,8 @@ expressApp.get('/login', function(req, res, next) {
       console.log(res);
     }
   )(req, res, next);
-  console.log('2.');
-  console.log(res);
+  // console.log('2.');
+  // console.log(res);
   loginWindow.loadURL(
     'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fgoogle%2Fcallback&scope=profile%20email&client_id=652992226449-3irs0hgth1rsk25a73aibjlhmqp70fi8.apps.googleusercontent.com'
   );
@@ -71,8 +71,9 @@ expressApp.get(
   '/auth/google/callback',
   passport.authenticate('google'),
   (req, res) => {
-    res.send(200);
-    loginWindow.hide();
+    console.log(req.session);
+    res.sendStatus(200);
+    loginWindow.destroy();
     usersWindow.show();
   }
 );
