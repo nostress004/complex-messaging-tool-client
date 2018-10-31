@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { messageToClient } from '../socket-io-client/messageToServer';
 import { Emoji } from 'emoji-mart';
+import { fetchMessages } from '../actions';
 
 class Messages extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       messages: []
     };
 
     this.messagesEnd = React.createRef();
-    messageToClient((err, message = 'no message yet') => {
+    /*  messageToClient((err, message = 'no message yet') => {
       console.log('called messageToServer');
       this.setState({
         messages: [...this.state.messages, message]
       });
-    });
+    }); */
+    messageToClient(this.props.fetchMessages);
   }
 
   componentDidMount() {
@@ -28,8 +31,8 @@ class Messages extends Component {
   }
 
   getMessages(messages) {
-    if (!messages && messages.length < 1) {
-      return <div>There are no messages atm </div>;
+    if (!messages || messages.length < 1) {
+      return <div>There are no messages ATM </div>;
     }
 
     const arrayOfMessages = messages.map((message, index) => (
@@ -46,7 +49,7 @@ class Messages extends Component {
   }
 
   renderMessages() {
-    return <div>{this.state && this.getMessages(this.state.messages)}</div>;
+    return <div>{this.props && this.getMessages(this.props.messageList)}</div>;
   }
 
   render() {
@@ -59,4 +62,13 @@ class Messages extends Component {
   }
 }
 
-export default Messages;
+function mapStateToProps({ messageList }) {
+  return { messageList };
+}
+
+export default connect(
+  mapStateToProps,
+  {
+    fetchMessages
+  }
+)(Messages);

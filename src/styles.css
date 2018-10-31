@@ -69,3 +69,22 @@ body {
 .message-box {
   flex-basis: 70%;
 }
+
+.signin {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+}
+
+.signinItem {
+  flex-basis: 45%;
+  align-self: center;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.sigInText {
+  margin-top: 50px;
+  margin-left: 25px;
+}

@@ -25,4 +25,28 @@ function onStatusUpdate(callBack) {
   console.log('status recieved');
 }
 
-export { messageToServer, messageToClient, emitStatusUpdate, onStatusUpdate };
+// authentication
+
+function emitSignIn() {
+  debugger;
+  socket.emit('signIn');
+  console.log('Signin has started!');
+}
+
+function onSignIn(callBack) {
+  debugger;
+  socket.on('signedIn', auth => {
+    // TODO: investigate why it wraps itself to an object
+    callBack(auth);
+  });
+  console.log('Successful signin!');
+}
+
+export {
+  messageToServer,
+  messageToClient,
+  emitStatusUpdate,
+  onStatusUpdate,
+  emitSignIn,
+  onSignIn
+};

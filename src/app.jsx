@@ -1,11 +1,25 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { ipcRenderer } from 'electron';
+
+import * as actions from './actions';
 import Users from './components/Users';
 import MessageFlexBoxLayout from './components/MessageFlexBoxLayout';
+import Login from './components/Login';
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.onStoreData = this.onStoreData.bind(this);
+    ipcRenderer.on('storeData', (event, store) =>
+      this.onStoreData(event, store)
+    );
+  }
+
+  onStoreData(event, store) {
+    this.props.fetchStoreData(store);
   }
 
   getRoutes() {
@@ -25,10 +39,30 @@ export default class App extends React.Component {
     return (
       <HashRouter>
         <div className="main">
-          <Route exact path="/messages" component={MessageFlexBoxLayout} />
-          <Route exact path="/users" component={Users} />
+          <Route exact path="/login" component={Login} />
+          <Route
+            exact
+            path="/messages"
+            component={
+              this.auth && this.props.auth ? MessageFlexBoxLayout : Login
+            }
+          />
+          <Route
+            exact
+            path="/users"
+            component={this.props && this.props.auth ? Users : Login}
+          />
         </div>
       </HashRouter>
     );
   }
 }
+
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(App);
