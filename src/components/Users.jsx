@@ -1,68 +1,72 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  emitStatusUpdate,
-  onStatusUpdate
-} from '../socket-io-client/messageToServer';
 
+import { emitStatusUpdate } from '../socket-io-client/messageToServer';
+import { connect } from 'react-redux';
 import UserList from './UserList';
 
 class Users extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      currentUser: { name: 'Csaba Kigyósi', status: 'Available' }
-    };
-
-    onStatusUpdate((err, status) => {
-      console.log('called onStatusUpdate');
-      let user = { name: this.state.currentUser.name, status };
-      this.setState({ currentUser: user });
-    });
 
     this.onStatusUpdateClick = this.onStatusUpdateClick.bind(this);
+
+    if (this.props.auth) {
+    }
   }
 
   onStatusUpdateClick(event) {
-    let status =
-      this.state.currentUser.status === 'Available' ? 'Busy' : 'Available';
-    emitStatusUpdate(status);
-
+    emitStatusUpdate(this.props.auth._id);
     event.preventDefault();
   }
 
   renderUsers() {
+    console.log(this.props);
     return (
-      <div className="card-column rounded">
+      <div className="card-column rounded ">
         <div className="card" style={{ background: 'lightblue' }}>
           <div className="card-body row">
             <img
               className="card-img-left col-4 profile_picture rounded"
-              src="https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg"
-              height="90"
-              width="100"
-              alt="Card image cap"
+              src={this.props.auth.photo}
+              alt="Google picture"
               style={{
                 borderStyle: 'solid',
-                background: 'white'
+                background: 'white',
+                width: '100%',
+                padding: 0
               }}
             />
-            <div className="card-title col-8">
-              <h4>{this.state.currentUser.name}</h4>
+            <div className="card-title col-8" style={{ paddingRight: 0 }}>
+              <h4>
+                <button
+                  onClick={this.onStatusUpdateClick}
+                  className="btn btn-sm btn-success"
+                  style={{
+                    paddingRight: 0,
+                    marginRight: 5
+                  }}
+                />
+                {this.props.auth.name}
+              </h4>
               <p
                 className="card-text col-8"
                 style={{
                   padding: 0
                 }}
               >
-                <i>{this.state.currentUser.status || 'N/A'}</i>
+                <i> {this.props.auth.email}</i>
               </p>
-              <button
-                onClick={this.onStatusUpdateClick}
-                className="btn btn-sm btn-success"
-              >
-                Update status
-              </button>
+              <div type="text" disabled onClick={this.onStatusUpdateClick}>
+                <button
+                  onClick={this.onStatusUpdateClick}
+                  className="btn btn-sm btn-success"
+                  style={{
+                    marginRight: 5
+                  }}
+                >
+                  Add friend
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -80,4 +84,8 @@ class Users extends Component {
   }
 }
 
-export default Users;
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(mapStateToProps)(Users);

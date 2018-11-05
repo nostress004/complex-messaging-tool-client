@@ -78,10 +78,8 @@ body {
 }
 
 .signinItem {
-  flex-basis: 45%;
+  flex-basis: 50%;
   align-self: center;
-  font-size: 16pt;
-  font-weight: bold;
 }
 
 .sigInText {

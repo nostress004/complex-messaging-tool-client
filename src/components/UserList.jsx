@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+import { onClients } from '../socket-io-client/messageToServer';
+import { fetchUsers } from '../actions';
+
 class UserList extends Component {
   constructor(props, context) {
     super(props, context);
@@ -8,6 +12,19 @@ class UserList extends Component {
       availableOpen: true,
       offlineOpen: true
     };
+
+    onClients(this.props.fetchUsers);
+
+    this.getOnlineUsers = this.getOnlineUsers.bind(this);
+    this.getOfflineUsers = this.getOfflineUsers.bind(this);
+  }
+
+  getOnlineUsers() {
+    return this.props.userList && this.props.userList.length;
+  }
+
+  getOfflineUsers() {
+    debugger;
   }
 
   render() {
@@ -26,7 +43,7 @@ class UserList extends Component {
             paddingLeft: 5
           }}
         >
-          <u>Available</u>
+          <u>Available {this.getOnlineUsers()}</u>
         </div>
         <br />
         <div
@@ -84,4 +101,11 @@ class UserList extends Component {
   }
 }
 
-export default UserList;
+function mapStateToProps({ userList }) {
+  return { userList };
+}
+
+export default connect(
+  mapStateToProps,
+  { fetchUsers }
+)(UserList);

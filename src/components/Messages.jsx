@@ -19,7 +19,7 @@ class Messages extends Component {
         messages: [...this.state.messages, message]
       });
     }); */
-    messageToClient(this.props.fetchMessages);
+    //messageToClient(this.props.fetchMessages);
   }
 
   componentDidMount() {

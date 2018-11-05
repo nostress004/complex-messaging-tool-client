@@ -1,5 +1,7 @@
 import { callbackify } from 'util';
 import socket from './connect';
+
+import * as actions from '../actions';
 // TODO:move variables to config files
 
 function messageToServer(message) {
@@ -27,19 +29,15 @@ function onStatusUpdate(callBack) {
 
 // authentication
 
-function emitSignIn() {
-  debugger;
-  socket.emit('signIn');
-  console.log('Signin has started!');
+function emitSignIn(user) {
+  socket.emit('signIn', user);
 }
 
-function onSignIn(callBack) {
-  debugger;
-  socket.on('signedIn', auth => {
-    // TODO: investigate why it wraps itself to an object
-    callBack(auth);
+function onClients(callBack) {
+  socket.on('sendClients', clients => {
+    callBack(clients);
   });
-  console.log('Successful signin!');
+  console.log('clients recieved');
 }
 
 export {
@@ -48,5 +46,5 @@ export {
   emitStatusUpdate,
   onStatusUpdate,
   emitSignIn,
-  onSignIn
+  onClients
 };

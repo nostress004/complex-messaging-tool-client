@@ -52,6 +52,7 @@ expressApp.get('/login', function(req, res, next) {
   passport.authenticate('google', {
     scope: ['profile', 'email']
   })(req, res, next);
+  createUsersWindow();
   loginWindow.loadURL(res.getHeaders().location);
 });
 
@@ -60,8 +61,11 @@ expressApp.get(
   passport.authenticate('google'),
   (req, res) => {
     res.sendStatus(200);
-    loginWindow.destroy();
-    usersWindow.show();
+    console.log(req.session);
+    initStore(req.user);
+    if (loginWindow) {
+      loginWindow.destroy();
+    }
   }
 );
 
@@ -147,8 +151,7 @@ const createUsersWindow = async () => {
   usersWindow = new BrowserWindow({
     title: 'CMT messenger',
     width: 400,
-    height: 700,
-    show: false
+    height: 700
   });
 
   // and load the index.html of the app.
@@ -181,8 +184,6 @@ const createUsersWindow = async () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createMessageWindow);
-app.on('ready', createUsersWindow);
 app.on('ready', createLoginWindow);
 
 // Quit when all windows are closed.
@@ -211,9 +212,17 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-// IPC listeners
+function initStore(store) {
+  usersWindow.webContents.send('storeData', {
+    auth: store,
+    userList: null,
+    messageList: null
+  });
+}
 
-ipcMain.on('showUsers', (event, store) => {
+// IPC listeners
+/*
+ipcMain.on('initStore', (event, store) => {
   if (loginWindow !== null) {
     loginWindow.hide();
   }
@@ -228,4 +237,4 @@ ipcMain.on('showUsers', (event, store) => {
   });
 
   usersWindow.show();
-});
+});*/

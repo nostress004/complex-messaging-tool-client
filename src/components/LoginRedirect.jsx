@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import UserPicture from './UserPicture';
+import { CircleLoader } from 'react-spinners';
 
 class LoginRedirect extends Component {
   constructor(props, context) {
@@ -10,8 +11,8 @@ class LoginRedirect extends Component {
     return (
       <div className="signin">
         <div className="signinItem">
-          <UserPicture picture={true} className="signinPicture" />{' '}
-          <p className="sigInText">Welcome back {this.props.auth.name}!</p>
+          <CircleLoader />
+          Please wait!
         </div>
       </div>
     );

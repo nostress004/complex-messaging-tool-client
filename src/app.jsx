@@ -7,15 +7,16 @@ import * as actions from './actions';
 import Users from './components/Users';
 import MessageFlexBoxLayout from './components/MessageFlexBoxLayout';
 import Login from './components/Login';
+import LoginRedirect from './components/LoginRedirect';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.onStoreData = this.onStoreData.bind(this);
-    ipcRenderer.on('storeData', (event, store) =>
-      this.onStoreData(event, store)
-    );
+    ipcRenderer.on('storeData', (event, store) => {
+      this.onStoreData(event, store);
+    });
   }
 
   onStoreData(event, store) {
@@ -50,7 +51,7 @@ class App extends React.Component {
           <Route
             exact
             path="/users"
-            component={this.props && this.props.auth ? Users : Login}
+            component={this.props && this.props.auth ? Users : LoginRedirect}
           />
         </div>
       </HashRouter>
