@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchUser } from '../actions';
 
 class SignIn extends Component {
   constructor(props, context) {
@@ -27,13 +25,4 @@ class SignIn extends Component {
   }
 }
 
-function mapStateToProps({ auth }) {
-  return { auth };
-}
-
-export default connect(
-  mapStateToProps,
-  {
-    fetchUser
-  }
-)(SignIn);
+export default SignIn;

@@ -1,9 +1,6 @@
 import { callbackify } from 'util';
 import socket from './connect';
 
-import * as actions from '../actions';
-// TODO:move variables to config files
-
 function messageToServer(message) {
   socket.emit('messageToServer', message);
   console.log(`${message} message has been sent to the server`);
@@ -40,11 +37,18 @@ function onClients(callBack) {
   console.log('clients recieved');
 }
 
+// update status
+
+function emitAddFriend(email) {
+  socket.emit('addFriend', email);
+}
+
 export {
   messageToServer,
   messageToClient,
   emitStatusUpdate,
   onStatusUpdate,
   emitSignIn,
-  onClients
+  onClients,
+  emitAddFriend
 };

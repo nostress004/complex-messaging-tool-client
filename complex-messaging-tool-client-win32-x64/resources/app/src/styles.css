@@ -1,0 +1,88 @@
+.profile_picture {
+  border: solid;
+}
+
+img {
+  border-style: solid;
+}
+
+body {
+  height: 100%;
+  background-image: url('https://cdn.pixabay.com/photo/2015/09/18/06/42/the-background-945108_1280.jpg');
+}
+
+.main {
+  height: 100%;
+  overflow: auto;
+}
+
+.messages-main {
+  height: 100%;
+  overflow: auto;
+}
+
+@media (min-height: 480px) {
+  .vertical-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 480px) {
+  .function-container {
+    flex: 2;
+    display: flex;
+    margin-bottom: 5px;
+    justify-content: space-around;
+  }
+
+  .input-container {
+    flex: 15;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .user-height {
+    height: 25vh;
+  }
+
+  .message-height {
+    height: 55vh;
+    overflow: auto;
+  }
+}
+
+.function-box {
+  flex-basis: 15%;
+}
+
+.input-box-1 {
+  flex-basis: 25%;
+  align-self: center;
+}
+
+.input-box-2 {
+  flex-basis: 70%;
+  align-self: center;
+}
+
+.message-box {
+  flex-basis: 70%;
+}
+
+.signin {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+}
+
+.signinItem {
+  flex-basis: 50%;
+  align-self: center;
+}
+
+.sigInText {
+  margin-top: 50px;
+  margin-left: 25px;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { emitStatusUpdate } from '../socket-io-client/messageToServer';
+import { emitAddFriend } from '../socket-io-client/messageToServer';
 import { connect } from 'react-redux';
 import UserList from './UserList';
 
@@ -8,19 +8,63 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
-    this.onStatusUpdateClick = this.onStatusUpdateClick.bind(this);
+    this.state = {
+      addFriend: false
+    };
 
-    if (this.props.auth) {
-    }
+    this.onStatusUpdateClick = this.onStatusUpdateClick.bind(this);
+    this.onStatusUpdateSubmit = this.onStatusUpdateSubmit.bind(this);
+    this.renderAddFriendComponent = this.renderAddFriendComponent.bind(this);
   }
 
   onStatusUpdateClick(event) {
-    emitStatusUpdate(this.props.auth._id);
+    this.setState({ addFriend: true });
     event.preventDefault();
   }
 
+  onStatusUpdateSubmit(event) {
+    if (event) {
+      event.preventDefault();
+    }
+    this.setState({ addFriend: false });
+
+    emitAddFriend(this.input.value);
+  }
+
+  renderAddFriendComponent() {
+    let renderedComponent;
+
+    if (this.state.addFriend) {
+      return (
+        <form onSubmit={this.onStatusUpdateSubmit}>
+          <input
+            ref={element => {
+              this.input = element;
+            }}
+            placeholder="enter e-mail address"
+            style={{
+              marginRight: 5
+            }}
+            type="text"
+          />
+        </form>
+      );
+    } else {
+      return (
+        <button
+          onClick={this.onStatusUpdateClick}
+          className="btn btn-sm btn-success"
+          style={{
+            marginRight: 5
+          }}
+        >
+          Add friend
+        </button>
+      );
+    }
+  }
+
   renderUsers() {
-    console.log(this.props);
     return (
       <div className="card-column rounded ">
         <div className="card" style={{ background: 'lightblue' }}>
@@ -56,17 +100,7 @@ class Users extends Component {
               >
                 <i> {this.props.auth.email}</i>
               </p>
-              <div type="text" disabled onClick={this.onStatusUpdateClick}>
-                <button
-                  onClick={this.onStatusUpdateClick}
-                  className="btn btn-sm btn-success"
-                  style={{
-                    marginRight: 5
-                  }}
-                >
-                  Add friend
-                </button>
-              </div>
+              <div>{this.renderAddFriendComponent()}</div>
             </div>
           </div>
         </div>

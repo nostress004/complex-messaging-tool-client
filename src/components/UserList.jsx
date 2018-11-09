@@ -15,16 +15,33 @@ class UserList extends Component {
 
     onClients(this.props.fetchUsers);
 
-    this.getOnlineUsers = this.getOnlineUsers.bind(this);
-    this.getOfflineUsers = this.getOfflineUsers.bind(this);
+    this.getUsers = this.getUsers.bind(this);
   }
 
-  getOnlineUsers() {
-    return this.props.userList && this.props.userList.length;
-  }
+  getUsers(status) {
+    let users = this.props.userList && this.props.userList[status + 'Users'];
+    let renderedContent = [];
 
-  getOfflineUsers() {
-    debugger;
+    if (!users || !users.length) {
+      return <div>There aren't any {status} users at this time! </div>;
+    }
+
+    users.map((user, index) => {
+      if (user.email !== this.props.auth.email) {
+        renderedContent.push(
+          <li key={index}>
+            <b>{user.name}: </b>
+            <i>{user.email}</i>
+          </li>
+        );
+      }
+    });
+
+    return renderedContent.length ? (
+      renderedContent
+    ) : (
+      <div>There aren't any {status} users at this time! </div>
+    );
   }
 
   render() {
@@ -43,7 +60,7 @@ class UserList extends Component {
             paddingLeft: 5
           }}
         >
-          <u>Available {this.getOnlineUsers()}</u>
+          <u>Available</u>
         </div>
         <br />
         <div
@@ -54,18 +71,7 @@ class UserList extends Component {
             paddingBottom: 15
           }}
         >
-          <li>
-            <b>Jane </b>- <i>Listening to music</i>
-          </li>
-          <li>
-            <b>Suzan</b>
-          </li>
-          <li>
-            <b>Kane </b>- <i>Away</i>
-          </li>
-          <li>
-            <b>James</b>
-          </li>
+          {this.getUsers('online')}
         </div>
         <div
           className="rounded"
@@ -90,19 +96,15 @@ class UserList extends Component {
             color: 'gray'
           }}
         >
-          <li>Darell</li>
-          <li>Olga</li>
-          <li>Ben</li>
-          <li>Csaba</li>
-          <li>Nick</li>
+          {this.getUsers('offline')}
         </div>
       </div>
     );
   }
 }
 
-function mapStateToProps({ userList }) {
-  return { userList };
+function mapStateToProps({ userList, auth }) {
+  return { userList, auth };
 }
 
 export default connect(
