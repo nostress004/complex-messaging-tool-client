@@ -1,9 +1,10 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Notification } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import { start } from 'repl';
+const notifier = require('electron-notifications');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -213,11 +214,39 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 function initStore(store) {
+  // Just title
+  // notifier.notify('Calendar');
+  setAppUserModelId();
+  console.log(Notification.isSupported());
+  let n = new Notification({ title: 'asd', body: 'asdasd' });
+  console.log('notiii');
+  console.log(n);
   usersWindow.webContents.send('storeData', {
     auth: store,
     userList: null,
     messageList: null
   });
+
+  /* const noti = new Notification({
+    title: 'BTC Alert',
+    body: 'BTC just beat your target price!'
+  }); */
+}
+
+function setAppUserModelId() {
+  var updateDotExe = path.join(
+    path.dirname(process.execPath),
+    '..',
+    'update.exe'
+  );
+
+  var packageDir = path.dirname(path.resolve(updateDotExe));
+  var packageName = path.basename(packageDir);
+  var exeName = path.basename(process.execPath).replace(/\.exe$/i, '');
+
+  global.appUserModelId = `com.squirrel.${exeName}`;
+  // app.setAppUserModelId(global.appUserModelId);
+  app.setAppUserModelId(global.appUserModelId);
 }
 
 // IPC listeners

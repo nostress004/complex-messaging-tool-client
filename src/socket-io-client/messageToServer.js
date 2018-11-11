@@ -37,6 +37,18 @@ function onClients(callBack) {
   console.log('clients recieved');
 }
 
+function onFriendSignIn(callBack) {
+  socket.on('friendSignIn', client => {
+    callBack(client);
+  });
+}
+
+function onFriendSignOut(callBack) {
+  socket.on('friendSignOut', client => {
+    callBack(client);
+  });
+}
+
 // update status
 
 function emitAddFriend(email) {
@@ -50,5 +62,7 @@ export {
   onStatusUpdate,
   emitSignIn,
   onClients,
-  emitAddFriend
+  emitAddFriend,
+  onFriendSignIn,
+  onFriendSignOut
 };

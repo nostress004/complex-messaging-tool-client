@@ -8,6 +8,7 @@ const userSchema = new Schema({
   email: String,
   photo: String,
   status: String,
+  clientID: String,
   conversations: [conversationSchema]
 });
 userSchema.add({ contacts: [userSchema] });

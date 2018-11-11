@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { onClients } from '../socket-io-client/messageToServer';
-import { fetchUsers } from '../actions';
+import {
+  onClients,
+  onFriendSignIn,
+  onFriendSignOut
+} from '../socket-io-client/messageToServer';
+import { fetchUsers, fetchFriendSignIn, fetchFriendSignOut } from '../actions';
 
 class UserList extends Component {
   constructor(props, context) {
@@ -14,6 +18,9 @@ class UserList extends Component {
     };
 
     onClients(this.props.fetchUsers);
+    onFriendSignIn(this.props.fetchFriendSignIn);
+    onFriendSignOut(this.props.fetchFriendSignOut);
+    let n = new Notification('It', { body: 'works!' });
 
     this.getUsers = this.getUsers.bind(this);
   }
@@ -109,5 +116,5 @@ function mapStateToProps({ userList, auth }) {
 
 export default connect(
   mapStateToProps,
-  { fetchUsers }
+  { fetchUsers, fetchFriendSignIn, fetchFriendSignOut }
 )(UserList);
