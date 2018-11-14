@@ -14,13 +14,23 @@ class App extends React.Component {
     super(props);
 
     this.onStoreData = this.onStoreData.bind(this);
+    this.onMessageData = this.onMessageData.bind(this);
+
     ipcRenderer.on('storeData', (event, store) => {
       this.onStoreData(event, store);
+    });
+    ipcRenderer.on('messageData', (event, store) => {
+      this.onMessageData(event, store);
     });
   }
 
   onStoreData(event, store) {
     this.props.fetchStoreData(store);
+  }
+
+  onMessageData(event, store) {
+    //this.props.fetchConversation(store.conver);
+    this.props.fetchMessageData(store);
   }
 
   getRoutes() {
@@ -41,13 +51,7 @@ class App extends React.Component {
       <HashRouter>
         <div className="main">
           <Route exact path="/login" component={Login} />
-          <Route
-            exact
-            path="/messages"
-            component={
-              this.auth && this.props.auth ? MessageFlexBoxLayout : Login
-            }
-          />
+          <Route exact path="/messages" component={MessageFlexBoxLayout} />
           <Route
             exact
             path="/users"

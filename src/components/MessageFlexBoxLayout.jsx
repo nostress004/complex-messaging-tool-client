@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import UserCard from './UserCard';
 import UserPicture from './UserPicture';
 import Messages from './Messages';
 import TextArea from './TextArea';
 
+import { fetchConversation } from '../actions';
+
 class MessageLayout extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {};
+    this.getPicture = this.getPicture.bind(this);
   }
 
+  getPicture() {
+    return (
+      (this.props && this.props.auth && this.props.auth.photo) ||
+      'https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg'
+    );
+  }
   render() {
     return (
       <div className="messages-main vertical-container">
@@ -57,4 +67,8 @@ class MessageLayout extends Component {
   }
 }
 
-export default MessageLayout;
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(mapStateToProps)(MessageLayout);

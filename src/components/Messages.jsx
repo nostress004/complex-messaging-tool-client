@@ -13,12 +13,12 @@ class Messages extends Component {
     };
 
     this.messagesEnd = React.createRef();
-    /*  messageToClient((err, message = 'no message yet') => {
+    messageToClient((err, message = 'no message yet') => {
       console.log('called messageToServer');
       this.setState({
         messages: [...this.state.messages, message]
       });
-    }); */
+    });
     //messageToClient(this.props.fetchMessages);
   }
 
@@ -31,7 +31,9 @@ class Messages extends Component {
   }
 
   getMessages(messages) {
-    if (!messages || messages.length < 1) {
+    // @todo: check
+
+    if (!messages || messages.length < 1 || messages[0] === undefined) {
       return <div>There are no messages ATM </div>;
     }
 
@@ -49,7 +51,7 @@ class Messages extends Component {
   }
 
   renderMessages() {
-    return <div>{this.props && this.getMessages(this.props.messageList)}</div>;
+    return <div>{this.state && this.getMessages(this.state.messages)}</div>;
   }
 
   render() {
@@ -62,8 +64,8 @@ class Messages extends Component {
   }
 }
 
-function mapStateToProps({ messageList }) {
-  return { messageList };
+function mapStateToProps({ messageList, auth }) {
+  return { messageList, auth };
 }
 
 export default connect(

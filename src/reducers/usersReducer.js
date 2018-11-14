@@ -19,7 +19,6 @@ export default function(state = null, action) {
 }
 
 function updateOnlineState(state, action) {
-  debugger;
   return update(state, {
     onlineUsers: {
       $push: [action.payload.user]

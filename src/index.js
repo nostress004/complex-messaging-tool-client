@@ -179,6 +179,9 @@ const createUsersWindow = async () => {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     usersWindow = null;
+    if (messageWindow) {
+      messageWindow.destroy();
+    }
   });
 };
 
@@ -186,6 +189,7 @@ const createUsersWindow = async () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createLoginWindow);
+app.on('ready', createMessageWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -214,56 +218,27 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 function initStore(store) {
-  // Just title
-  // notifier.notify('Calendar');
-  setAppUserModelId();
-  console.log(Notification.isSupported());
-  let n = new Notification({ title: 'asd', body: 'asdasd' });
-  console.log('notiii');
-  console.log(n);
   usersWindow.webContents.send('storeData', {
     auth: store,
     userList: null,
     messageList: null
   });
-
-  /* const noti = new Notification({
-    title: 'BTC Alert',
-    body: 'BTC just beat your target price!'
-  }); */
-}
-
-function setAppUserModelId() {
-  var updateDotExe = path.join(
-    path.dirname(process.execPath),
-    '..',
-    'update.exe'
-  );
-
-  var packageDir = path.dirname(path.resolve(updateDotExe));
-  var packageName = path.basename(packageDir);
-  var exeName = path.basename(process.execPath).replace(/\.exe$/i, '');
-
-  global.appUserModelId = `com.squirrel.${exeName}`;
-  // app.setAppUserModelId(global.appUserModelId);
-  app.setAppUserModelId(global.appUserModelId);
 }
 
 // IPC listeners
-/*
-ipcMain.on('initStore', (event, store) => {
-  if (loginWindow !== null) {
-    loginWindow.hide();
-  }
 
-  if (usersWindow === null) {
-    return;
+ipcMain.on('messageUser', async (event, store, conversation) => {
+  if (!messageWindow) {
+    const windowTMP = await createMessageWindow();
   }
-  usersWindow.webContents.send('storeData', {
-    auth: store.auth,
-    userList: null,
-    messageList: null
-  });
-
-  usersWindow.show();
-});*/
+  if (messageWindow || windowTMP) {
+    console.log();
+    messageWindow.show();
+    console.log('creaaaaaaaaaaaating window');
+    console.log(store);
+    messageWindow.webContents.send('messageData', {
+      auth: store,
+      conversation: conversation
+    });
+  }
+});

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+
 class UserPicture extends Component {
   constructor(props, context) {
     super(props, context);
@@ -15,13 +17,13 @@ class UserPicture extends Component {
       <div>
         <img
           className="card-img-fluid profile_picture rounded"
-          src="https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg"
+          src={this.props.auth && this.props.auth.photo}
           hidden={!this.state.picture}
           alt="Card image cap"
           style={{
             borderStyle: 'solid',
             background: 'white',
-            width: '85%'
+            width: '70%'
           }}
         />
       </div>
@@ -29,4 +31,8 @@ class UserPicture extends Component {
   }
 }
 
-export default UserPicture;
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+
+export default connect(mapStateToProps)(UserPicture);

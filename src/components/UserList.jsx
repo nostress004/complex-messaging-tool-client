@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { ipcRenderer } from 'electron';
 import { connect } from 'react-redux';
 import {
   onClients,
@@ -14,7 +15,8 @@ class UserList extends Component {
 
     this.state = {
       availableOpen: true,
-      offlineOpen: true
+      offlineOpen: true,
+      updateDialog: ''
     };
 
     onClients(this.props.fetchUsers);
@@ -23,6 +25,24 @@ class UserList extends Component {
     let n = new Notification('It', { body: 'works!' });
 
     this.getUsers = this.getUsers.bind(this);
+    this.onMessageUserClick = this.onMessageUserClick.bind(this);
+  }
+
+  onMessageUserClick(event) {
+    var conversation = this.props.auth.contacts.find(c => {
+      return c._doc.email === event.target.getAttribute('value');
+    });
+    if (this.props.auth || conversation) {
+      ipcRenderer.send('messageUser', this.props.auth, conversation);
+    } else {
+      this.setState({ updateDialog: 'Could not open message window' });
+      setTimeout(
+        function() {
+          this.setState({ updateDialog: '' });
+        }.bind(this),
+        2500
+      );
+    }
   }
 
   getUsers(status) {
@@ -34,14 +54,41 @@ class UserList extends Component {
     }
 
     users.map((user, index) => {
-      if (user.email !== this.props.auth.email) {
-        renderedContent.push(
-          <li key={index}>
-            <b>{user.name}: </b>
-            <i>{user.email}</i>
-          </li>
-        );
-      }
+      //if (user.email !== this.props.auth.email) {
+      renderedContent.push(
+        <li key={index} style={{ listStyleType: 'none' }}>
+          <button
+            className="btn btn-sm btn-success"
+            style={{
+              paddingRight: 0,
+              marginRight: 5,
+              marginLeft: 5
+            }}
+          />
+          <img
+            className="card-img-left col-4 profile_picture rounded"
+            src={this.props.auth.photo}
+            alt="Google picture"
+            style={{
+              borderStyle: 'solid',
+              background: 'white',
+              width: '10%',
+              padding: 0,
+              marginRight: 5
+            }}
+          />
+
+          <b
+            value={user.email}
+            style={{ cursor: 'pointer' }}
+            onClick={this.onMessageUserClick}
+          >
+            {user.name}:{' '}
+          </b>
+          <i>{user.email}</i>
+        </li>
+      );
+      //}
     });
 
     return renderedContent.length ? (
@@ -51,9 +98,25 @@ class UserList extends Component {
     );
   }
 
+  getUpdateDialog() {
+    if (this.state.updateDialog) {
+      return (
+        <div
+          style={{
+            background: 'tomato',
+            margin: 5
+          }}
+        >
+          {this.state.updateDialog}
+        </div>
+      );
+    }
+  }
+
   render() {
     return (
       <div>
+        {this.getUpdateDialog()}
         <div
           className="rounded"
           onClick={() =>
