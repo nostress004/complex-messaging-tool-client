@@ -4,3 +4,5 @@ export const FETCH_MESSAGE = 'fetch_message';
 export const FETCH_FRIEND_SIGNIN = 'fetch_friend_signin';
 export const FETCH_FRIEND_SIGNOUT = 'fetch_friend_signout';
 export const FETCH_CONVERSATION = 'fetch_conversation';
+export const REMOVE_ONLINEUSER = 'remove_onlineuser';
+export const REMOVE_OFFLINEUSER = 'remove_offlineuser';

@@ -19,13 +19,15 @@ class UserList extends Component {
       updateDialog: ''
     };
 
-    onClients(this.props.fetchUsers);
-    onFriendSignIn(this.props.fetchFriendSignIn);
-    onFriendSignOut(this.props.fetchFriendSignOut);
-
     this.getUsers = this.getUsers.bind(this);
     this.setNotificationbar = this.setNotificationbar.bind(this);
     this.onMessageUserClick = this.onMessageUserClick.bind(this);
+    this.friendSignIn = this.friendSignIn.bind(this);
+    this.friendSignOut = this.friendSignOut.bind(this);
+
+    onClients(this.props.fetchUsers);
+    onFriendSignIn(this.friendSignIn);
+    onFriendSignOut(this.friendSignOut);
   }
 
   onMessageUserClick(event) {
@@ -36,6 +38,20 @@ class UserList extends Component {
       ipcRenderer.send('messageUser', this.props.auth, recipient);
     } else {
       this.setNotificationbar('Could not open message window');
+    }
+  }
+
+  friendSignIn(client) {
+    if (client) {
+      this.setNotificationbar(client.name + ' has logged in!');
+      this.props.fetchFriendSignIn(client);
+    }
+  }
+
+  friendSignOut() {
+    if (client) {
+      this.setNotificationbar(client.name + ' has logged out!');
+      this.props.fetchFriendSignOut(client);
     }
   }
 
@@ -60,7 +76,7 @@ class UserList extends Component {
     users.map((user, index) => {
       //if (user.email !== this.props.auth.email) {
       renderedContent.push(
-        <li key={index} style={{ listStyleType: 'none' }}>
+        <li key={index} style={{ listStyleType: 'none', paddingTop: 5 }}>
           <button
             className="btn btn-sm btn-success"
             style={{
@@ -71,7 +87,7 @@ class UserList extends Component {
           />
           <img
             className="card-img-left col-4 profile_picture rounded"
-            src={this.props.auth.photo}
+            src={user.photo}
             alt="Google picture"
             style={{
               borderStyle: 'solid',
@@ -87,7 +103,7 @@ class UserList extends Component {
             style={{ cursor: 'pointer' }}
             onClick={this.onMessageUserClick}
           >
-            {user.name}:{' '}
+            {user.name.split(' ')[0]}:{' '}
           </b>
           <i>{user.email}</i>
         </li>

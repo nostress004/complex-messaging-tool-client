@@ -4,7 +4,9 @@ import {
   FETCH_MESSAGE,
   FETCH_FRIEND_SIGNIN,
   FETCH_FRIEND_SIGNOUT,
-  FETCH_CONVERSATION
+  FETCH_CONVERSATION,
+  REMOVE_ONLINEUSER,
+  REMOVE_OFFLINEUSER
 } from './types';
 
 import { emitSignIn } from '../socket-io-client/messageToServer';
@@ -55,11 +57,19 @@ export const fetchFriendSignIn = user => async dispatch => {
     type: FETCH_FRIEND_SIGNIN,
     payload: { user }
   });
+  dispatch({
+    type: REMOVE_OFFLINEUSER,
+    payload: { user }
+  });
 };
 
 export const fetchFriendSignOut = user => async dispatch => {
   dispatch({
     type: FETCH_FRIEND_SIGNOUT,
+    payload: { user }
+  });
+  dispatch({
+    type: REMOVE_ONLINEUSER,
     payload: { user }
   });
 };
