@@ -182,6 +182,7 @@ const createUsersWindow = async () => {
     if (messageWindow) {
       messageWindow.destroy();
     }
+    app.quit();
   });
 };
 
@@ -227,18 +228,23 @@ function initStore(store) {
 
 // IPC listeners
 
-ipcMain.on('messageUser', async (event, store, conversation) => {
+ipcMain.on('messageUser', async (event, store, recipient) => {
   if (!messageWindow) {
     const windowTMP = await createMessageWindow();
+    if (windowTMP) {
+      messageWindow.show();
+      messageWindow.webContents.send('createMessagesWindow', {
+        auth: store,
+        recipient
+      });
+    }
   }
-  if (messageWindow || windowTMP) {
-    console.log();
+
+  if (messageWindow) {
     messageWindow.show();
-    console.log('creaaaaaaaaaaaating window');
-    console.log(store);
-    messageWindow.webContents.send('messageData', {
+    messageWindow.webContents.send('createMessagesWindow', {
       auth: store,
-      conversation: conversation
+      recipient
     });
   }
 });

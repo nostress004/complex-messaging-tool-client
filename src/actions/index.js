@@ -1,7 +1,7 @@
 import {
   FETCH_USER,
   FETCH_USERS,
-  FETCH_MESSAGES,
+  FETCH_MESSAGE,
   FETCH_FRIEND_SIGNIN,
   FETCH_FRIEND_SIGNOUT,
   FETCH_CONVERSATION
@@ -9,9 +9,19 @@ import {
 
 import { emitSignIn } from '../socket-io-client/messageToServer';
 //this is async instead of .then
-export const fetchMessageData = ({ auth, messages }) => async dispatch => {
+export const fetchMessageData = ({
+  auth,
+  messageHistory
+}) => async dispatch => {
   dispatch({ type: FETCH_USER, payload: auth });
-  dispatch({ type: FETCH_MESSAGES, payload: messages });
+};
+
+export const fetchConversation = ({ messageHistory }) => {
+  dispatch({ type: FETCH_CONVERSATION, payload: messageHistory });
+};
+
+export const fetchMessage = ({ message }) => async dispatch => {
+  dispatch({ type: FETCH_MESSAGE, payload: message });
 };
 
 export const fetchStoreData = ({ auth, users, messages }) => async dispatch => {
@@ -41,7 +51,6 @@ export const fetchUsers = users => async dispatch => {
 };
 
 export const fetchFriendSignIn = user => async dispatch => {
-  debugger;
   dispatch({
     type: FETCH_FRIEND_SIGNIN,
     payload: { user }
@@ -49,24 +58,8 @@ export const fetchFriendSignIn = user => async dispatch => {
 };
 
 export const fetchFriendSignOut = user => async dispatch => {
-  debugger;
   dispatch({
     type: FETCH_FRIEND_SIGNOUT,
     payload: { user }
   });
-};
-
-export const fetchMessages = (err, messages) => async dispatch => {
-  if (err) {
-    return;
-  }
-  dispatch({ type: FETCH_MESSAGES, payload: messages });
-};
-
-export const fetchConversation = (err, messages) => async dispatch => {
-  if (err) {
-    return;
-  }
-
-  dispatch({ type: FETCH_CONVERSATION, payload: conversation });
 };

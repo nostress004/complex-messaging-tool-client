@@ -14,13 +14,12 @@ class App extends React.Component {
     super(props);
 
     this.onStoreData = this.onStoreData.bind(this);
-    this.onMessageData = this.onMessageData.bind(this);
 
     ipcRenderer.on('storeData', (event, store) => {
       this.onStoreData(event, store);
     });
-    ipcRenderer.on('messageData', (event, store) => {
-      this.onMessageData(event, store);
+    ipcRenderer.on('createMessagesWindow', (event, store) => {
+      this.onCreateMessagesWindow(event, store);
     });
   }
 
@@ -28,7 +27,7 @@ class App extends React.Component {
     this.props.fetchStoreData(store);
   }
 
-  onMessageData(event, store) {
+  onCreateMessagesWindow(event, store) {
     //this.props.fetchConversation(store.conver);
     this.props.fetchMessageData(store);
   }

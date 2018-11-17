@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { messageToServer } from '../socket-io-client/messageToServer';
 import { Emoji, Picker } from 'emoji-mart';
@@ -20,8 +21,14 @@ class TextArea extends Component {
     if (!this.state.inputText || this.state.inputText.length <= 0) {
       return;
     }
-    messageToServer(this.state.inputText);
+    const messageObj = {
+      type: 'TEXT',
+      sender: this.props.auth.email,
+      content: this.state.inputText
+    };
+    messageToServer(messageObj);
     this.setState({ inputText: '' });
+    //this.props.callback();
     event.preventDefault();
   }
 
@@ -115,4 +122,8 @@ class TextArea extends Component {
   }
 }
 
-export default TextArea;
+function mapStateToProps({ auth, conversation }) {
+  return { auth, conversation };
+}
+
+export default connect(mapStateToProps)(TextArea);

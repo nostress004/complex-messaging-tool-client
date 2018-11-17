@@ -22,27 +22,31 @@ class UserList extends Component {
     onClients(this.props.fetchUsers);
     onFriendSignIn(this.props.fetchFriendSignIn);
     onFriendSignOut(this.props.fetchFriendSignOut);
-    let n = new Notification('It', { body: 'works!' });
 
     this.getUsers = this.getUsers.bind(this);
+    this.setNotificationbar = this.setNotificationbar.bind(this);
     this.onMessageUserClick = this.onMessageUserClick.bind(this);
   }
 
   onMessageUserClick(event) {
-    var conversation = this.props.auth.contacts.find(c => {
+    var recipient = this.props.auth.contacts.find(c => {
       return c._doc.email === event.target.getAttribute('value');
     });
-    if (this.props.auth || conversation) {
-      ipcRenderer.send('messageUser', this.props.auth, conversation);
+    if (this.props.auth || recipient) {
+      ipcRenderer.send('messageUser', this.props.auth, recipient);
     } else {
-      this.setState({ updateDialog: 'Could not open message window' });
-      setTimeout(
-        function() {
-          this.setState({ updateDialog: '' });
-        }.bind(this),
-        2500
-      );
+      this.setNotificationbar('Could not open message window');
     }
+  }
+
+  setNotificationbar(message) {
+    this.setState({ updateDialog: message });
+    setTimeout(
+      function() {
+        this.setState({ updateDialog: '' });
+      }.bind(this),
+      2500
+    );
   }
 
   getUsers(status) {

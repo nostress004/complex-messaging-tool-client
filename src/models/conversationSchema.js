@@ -4,7 +4,7 @@ const messageSchema = require('./messageSchema');
 const userSchema = require('./userSchema');
 
 const conversationSchema = new Schema({
-  participians: [userSchema],
+  to: userSchema,
   messages: [messageSchema]
 });
 

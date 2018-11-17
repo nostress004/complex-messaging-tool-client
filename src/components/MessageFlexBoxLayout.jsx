@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { CircleLoader } from 'react-spinners';
 import UserCard from './UserCard';
 import UserPicture from './UserPicture';
 import Messages from './Messages';
 import TextArea from './TextArea';
-
 import { fetchConversation } from '../actions';
+import {
+  emitConversationInit,
+  onConverstationInitalized
+} from '../socket-io-client/messageToServer';
 
 class MessageLayout extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {};
+    this.state = { loadHistory: false };
     this.getPicture = this.getPicture.bind(this);
+    this.getMessages = this.getMessages.bind(this);
+    this.conversationInitialized = this.conversationInitialized.bind(this);
+
+    onConverstationInitalized(this.conversationInitialized);
   }
 
   getPicture() {
@@ -22,6 +30,28 @@ class MessageLayout extends Component {
       'https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg'
     );
   }
+
+  componentDidMount() {
+    this.setState({ loadHistory: true });
+
+    if (this.props.conversation) {
+      emitConversationInit(this.props.conversation.recipient);
+    }
+  }
+
+  conversationInitialized(client) {
+    this.setState({ loadHistory: false });
+    this.props.fetchConversation(client);
+  }
+
+  getMessages() {
+    if (this.state.loading) {
+      return <CircleLoader />;
+    } else {
+      return <Messages />;
+    }
+  }
+
   render() {
     return (
       <div className="messages-main vertical-container">
@@ -67,8 +97,11 @@ class MessageLayout extends Component {
   }
 }
 
-function mapStateToProps({ auth }) {
-  return { auth };
+function mapStateToProps({ auth, conversation }) {
+  return { auth, conversation };
 }
 
-export default connect(mapStateToProps)(MessageLayout);
+export default connect(
+  mapStateToProps,
+  { fetchConversation }
+)(MessageLayout);

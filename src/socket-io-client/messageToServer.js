@@ -55,6 +55,16 @@ function emitAddFriend(email) {
   socket.emit('addFriend', email);
 }
 
+function emitConversationInit(toEmail) {
+  socket.emit('initConversation', toEmail);
+}
+
+function onConverstationInitalized(callBack) {
+  socket.on('conversationInitialized', messages => {
+    callBack(messages);
+  });
+}
+
 export {
   messageToServer,
   messageToClient,
@@ -64,5 +74,7 @@ export {
   onClients,
   emitAddFriend,
   onFriendSignIn,
-  onFriendSignOut
+  onFriendSignOut,
+  emitConversationInit,
+  onConverstationInitalized
 };
