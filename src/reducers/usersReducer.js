@@ -42,13 +42,15 @@ function addOffline(state, action) {
 
 function removeOnline(state, action) {
   return update(state, {
-    onlineUsers: arr => arr.filter(item => item != action.payload.user)
+    onlineUsers: arr =>
+      arr.filter(item => item.email != action.payload.user.email)
   });
 }
 
 function removeOffline(state, action) {
   return update(state, {
-    offlineUsers: arr => arr.filter(item => item != action.payload.user)
+    offlineUsers: arr =>
+      arr.filter(item => item.email != action.payload.user.email)
   });
 }
 

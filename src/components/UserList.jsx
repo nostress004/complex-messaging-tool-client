@@ -42,14 +42,14 @@ class UserList extends Component {
   }
 
   friendSignIn(client) {
-    if (client) {
+    if (client.email !== this.props.auth.email) {
       this.setNotificationbar(client.name + ' has logged in!');
       this.props.fetchFriendSignIn(client);
     }
   }
 
   friendSignOut(client) {
-    if (client) {
+    if (client.email !== this.props.auth.email) {
       this.setNotificationbar(client.name + ' has logged out!');
       this.props.fetchFriendSignOut(client);
     }
