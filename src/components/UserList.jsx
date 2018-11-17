@@ -48,7 +48,7 @@ class UserList extends Component {
     }
   }
 
-  friendSignOut() {
+  friendSignOut(client) {
     if (client) {
       this.setNotificationbar(client.name + ' has logged out!');
       this.props.fetchFriendSignOut(client);
