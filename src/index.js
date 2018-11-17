@@ -53,7 +53,6 @@ expressApp.get('/login', function(req, res, next) {
   passport.authenticate('google', {
     scope: ['profile', 'email']
   })(req, res, next);
-  createUsersWindow();
   loginWindow.loadURL(res.getHeaders().location);
 });
 
@@ -66,6 +65,9 @@ expressApp.get(
     initStore(req.user);
     if (loginWindow) {
       loginWindow.destroy();
+    }
+    if (usersWindow) {
+      usersWindow.show();
     }
   }
 );
@@ -152,7 +154,8 @@ const createUsersWindow = async () => {
   usersWindow = new BrowserWindow({
     title: 'CMT messenger',
     width: 400,
-    height: 700
+    height: 700,
+    show: false
   });
 
   // and load the index.html of the app.
@@ -191,6 +194,7 @@ const createUsersWindow = async () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createLoginWindow);
 app.on('ready', createMessageWindow);
+app.on('ready', createUsersWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
