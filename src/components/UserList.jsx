@@ -33,8 +33,9 @@ class UserList extends Component {
     var recipient = this.props.auth.contacts.find(c => {
       return c._doc.email === event.target.getAttribute('value');
     });
-    if (this.props.auth && recipient) {
-      ipcRenderer.send('messageUser', this.props.auth, recipient);
+
+    if (this.props.auth && recipient && recipient._doc) {
+      ipcRenderer.send('messageUser', this.props.auth, recipient._doc);
     } else {
       this.setNotificationbar('Could not open message window');
     }
