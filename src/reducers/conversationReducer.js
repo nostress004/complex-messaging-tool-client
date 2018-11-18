@@ -1,5 +1,6 @@
 import { FETCH_CONVERSATION, FETCH_MESSAGE } from '../actions/types';
 import update from 'immutability-helper';
+import { tmpdir } from 'os';
 
 export default function(state = {}, action) {
   switch (action.type) {
@@ -14,7 +15,9 @@ export default function(state = {}, action) {
 
 function addConversationToState(state, action) {
   return update(state, {
-    recipient: action.recipient
+    recipient: {
+      $set: action.payload.recipient
+    }
   });
 }
 

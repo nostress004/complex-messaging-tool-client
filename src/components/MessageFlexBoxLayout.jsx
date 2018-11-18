@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { ipcRenderer } from 'electron';
 import { CircleLoader } from 'react-spinners';
 import UserCard from './UserCard';
 import UserPicture from './UserPicture';
@@ -20,6 +20,7 @@ class MessageLayout extends Component {
     this.getPicture = this.getPicture.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.conversationInitialized = this.conversationInitialized.bind(this);
+    this.onNudgeClick = this.onNudgeClick.bind(this);
 
     onConverstationInitalized(this.conversationInitialized);
   }
@@ -31,10 +32,16 @@ class MessageLayout extends Component {
     );
   }
 
-  componentDidMount() {
-    this.setState({ loadHistory: true });
+  componentDidUpdate() {
+    if (!this.props.conversation) {
+      return;
+    }
+    if (!this.props.conversation.recipient) {
+      return;
+    }
 
-    if (this.props.conversation) {
+    if (!this.props.conversation.messages) {
+      debugger;
       emitConversationInit(this.props.conversation.recipient);
     }
   }
@@ -52,12 +59,25 @@ class MessageLayout extends Component {
     }
   }
 
+  onNudgeClick(event) {
+    ipcRenderer.send('nudgeWindow');
+  }
+
   render() {
+    const recipient =
+      this.props &&
+      this.props.conversation &&
+      this.props.conversation.recipient;
     return (
       <div className="messages-main vertical-container">
-        <div className="function-container">
+        <div className="function-container" style={{ padding: 10 }}>
           <div className="function-box">
-            <button className="btn btn-outline-primary btn-block">Nudge</button>
+            <button
+              className="btn btn-outline-primary btn-block"
+              onClick={this.onNudgeClick}
+            >
+              Nudge
+            </button>
           </div>
           <div className="function-box">
             <button className="btn btn-outline-success btn-block">
@@ -72,10 +92,18 @@ class MessageLayout extends Component {
         </div>
         <div className="input-container user-height">
           <div className="input-box-1">
-            <UserPicture picture={true} size={200} />
+            <UserPicture
+              picture={true}
+              src={recipient && recipient.photo}
+              size={200}
+            />
           </div>
           <div className="input-box-2">
-            <UserCard picture={false} />
+            <UserCard
+              name={recipient && recipient.name}
+              email={recipient && recipient.email}
+              status={recipient && recipient.status}
+            />
           </div>
         </div>
         <div className="input-container message-height">
@@ -86,7 +114,11 @@ class MessageLayout extends Component {
         </div>
         <div className="input-container user-height">
           <div className="input-box-1">
-            <UserPicture picture={true} size={300} />
+            <UserPicture
+              picture={true}
+              src={this.props.auth && this.props.auth.photo}
+              size={300}
+            />
           </div>
           <div className="input-box-2" style={{ height: '60%' }}>
             <TextArea picture={false} />

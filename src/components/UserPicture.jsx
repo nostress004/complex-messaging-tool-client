@@ -17,7 +17,7 @@ class UserPicture extends Component {
       <div>
         <img
           className="card-img-fluid profile_picture rounded"
-          src={this.props.auth && this.props.auth.photo}
+          src={this.props.src}
           hidden={!this.state.picture}
           alt="Card image cap"
           style={{

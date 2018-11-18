@@ -11,11 +11,9 @@ import {
 
 import { emitSignIn } from '../socket-io-client/messageToServer';
 //this is async instead of .then
-export const fetchMessageData = ({
-  auth,
-  messageHistory
-}) => async dispatch => {
+export const fetchMessageData = ({ auth, recipient }) => async dispatch => {
   dispatch({ type: FETCH_USER, payload: auth });
+  dispatch({ type: FETCH_CONVERSATION, payload: { recipient } });
 };
 
 export const fetchConversation = ({ messageHistory }) => {

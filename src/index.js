@@ -84,8 +84,9 @@ const createLoginWindow = async () => {
   // Create the browser window.
   loginWindow = new BrowserWindow({
     title: 'CMT',
-    width: 900,
-    height: 650
+    width: 640,
+    height: 480,
+    resizable: false
   });
 
   const startUrl = url.format({
@@ -120,7 +121,8 @@ const createMessageWindow = async () => {
     title: 'CMT',
     width: 1280,
     height: 768,
-    show: false
+    show: false,
+    resizable: false
   });
 
   const startUrl = url.format({
@@ -155,7 +157,8 @@ const createUsersWindow = async () => {
     title: 'CMT messenger',
     width: 400,
     height: 700,
-    show: false
+    show: false,
+    resizable: false
   });
 
   // and load the index.html of the app.
@@ -250,5 +253,30 @@ ipcMain.on('messageUser', async (event, store, recipient) => {
       auth: store,
       recipient
     });
+  }
+});
+
+ipcMain.on('nudgeWindow', async (event, store, recipient) => {
+  if (!messageWindow) {
+    return;
+  }
+  // [0] -> X ; [1] -> Y coords
+  var position = messageWindow.getPosition();
+
+  var id = setInterval(frame, 50);
+  var width = 0;
+  messageWindow.focus();
+  messageWindow.flashFrame(true);
+  function frame() {
+    if (width == 10) {
+      clearInterval(id);
+      messageWindow.setPosition(position[0], position[1], true);
+      messageWindow.flashFrame(false);
+    } else {
+      width++;
+      let randomX = Math.floor(Math.random() * 1.1 * position[0]) + position[0];
+      let randomY = Math.floor(Math.random() * 1.1 * position[1]) + position[1];
+      messageWindow.setPosition(randomX, randomY, true);
+    }
   }
 });

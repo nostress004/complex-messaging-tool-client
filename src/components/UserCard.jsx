@@ -15,14 +15,16 @@ class UserCard extends Component {
           <div className="card-body row">
             <UserPicture hidden={!this.state.picture} />
             <div className="card-title col-8">
-              <h4>John Doe (Available)</h4>
+              <h4>
+                {this.props.name} ({this.props.status})
+              </h4>
               <p
                 className="card-text col-8"
                 style={{
                   padding: 0
                 }}
               >
-                <i>Feeling good!</i>
+                <i>{this.props.email}</i>
               </p>
             </div>
           </div>

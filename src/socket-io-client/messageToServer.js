@@ -55,12 +55,14 @@ function emitAddFriend(email) {
   socket.emit('addFriend', email);
 }
 
-function emitConversationInit(toEmail) {
-  socket.emit('initConversation', toEmail);
+function emitConversationInit(recipient) {
+  debugger;
+  socket.emit('initConversation', recipient.email);
 }
 
 function onConverstationInitalized(callBack) {
   socket.on('conversationInitialized', messages => {
+    debugger;
     callBack(messages);
   });
 }

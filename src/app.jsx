@@ -28,7 +28,6 @@ class App extends React.Component {
   }
 
   onCreateMessagesWindow(event, store) {
-    //this.props.fetchConversation(store.conver);
     this.props.fetchMessageData(store);
   }
 

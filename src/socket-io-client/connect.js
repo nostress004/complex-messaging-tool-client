@@ -1,6 +1,6 @@
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 
-//const socket = openSocket('http://localhost:5000');
-const socket = openSocket('https://safe-crag-14775.herokuapp.com');
+//const socket = io('http://localhost:5000', { forceNew: false });
+const socket = io('https://safe-crag-14775.herokuapp.com', { forceNew: false });
 
 export default socket;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { ipcRenderer } from 'electron';
 import { connect } from 'react-redux';
 import {
@@ -34,7 +33,7 @@ class UserList extends Component {
     var recipient = this.props.auth.contacts.find(c => {
       return c._doc.email === event.target.getAttribute('value');
     });
-    if (this.props.auth || recipient) {
+    if (this.props.auth && recipient) {
       ipcRenderer.send('messageUser', this.props.auth, recipient);
     } else {
       this.setNotificationbar('Could not open message window');
@@ -42,10 +41,10 @@ class UserList extends Component {
   }
 
   friendSignIn(client) {
-    if (client.email !== this.props.auth.email) {
-      this.setNotificationbar(client.name + ' has logged in!');
-      this.props.fetchFriendSignIn(client);
-    }
+    //if (client.email !== this.props.auth.email) {
+    this.setNotificationbar(client.name + ' has logged in!');
+    this.props.fetchFriendSignIn(client);
+    //}
   }
 
   friendSignOut(client) {
@@ -78,7 +77,11 @@ class UserList extends Component {
       renderedContent.push(
         <li key={index} style={{ listStyleType: 'none', paddingTop: 5 }}>
           <button
-            className="btn btn-sm btn-success"
+            className={
+              user.status === 'Online'
+                ? 'btn btn-sm btn-success'
+                : 'btn btn-sm btn-danger'
+            }
             style={{
               paddingRight: 0,
               marginRight: 5,
