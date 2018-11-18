@@ -28,6 +28,7 @@ class App extends React.Component {
   }
 
   onCreateMessagesWindow(event, store) {
+    debugger;
     this.props.fetchMessageData(store);
   }
 

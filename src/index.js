@@ -10,7 +10,7 @@ const notifier = require('electron-notifications');
 // be closed automatically when the JavaScript object is garbage collected.
 let loginWindow, messageWindow, usersWindow;
 
-const isDevMode = process.execPath.match(/[\\/]electron/);
+const isDevMode = false; //process.execPath.match(/[\\/]electron/);
 const path = require('path');
 const url = require('url');
 
@@ -77,7 +77,6 @@ expressApp.get('/api/current_user', (req, res) => {
 });
 
 // auth stuff ends *******************************************************************
-
 if (isDevMode) enableLiveReload({ strategy: 'react-hmr' });
 
 const createLoginWindow = async () => {
@@ -237,14 +236,16 @@ function initStore(store) {
 
 ipcMain.on('messageUser', async (event, store, recipient) => {
   if (!messageWindow) {
-    const windowTMP = await createMessageWindow();
-    if (windowTMP) {
-      messageWindow.show();
+    createMessageWindow();
+    setTimeout(() => {
       messageWindow.webContents.send('createMessagesWindow', {
         auth: store,
         recipient
       });
-    }
+    }, 1000);
+    setTimeout(() => {
+      messageWindow.show();
+    }, 1500);
   }
 
   if (messageWindow) {
@@ -256,7 +257,7 @@ ipcMain.on('messageUser', async (event, store, recipient) => {
   }
 });
 
-ipcMain.on('nudgeWindow', async (event, store, recipient) => {
+ipcMain.on('nudgeWindow', async event => {
   if (!messageWindow) {
     return;
   }
@@ -279,4 +280,20 @@ ipcMain.on('nudgeWindow', async (event, store, recipient) => {
       messageWindow.setPosition(randomX, randomY, true);
     }
   }
+});
+
+ipcMain.on('viewUserList', async event => {
+  if (!usersWindow) {
+    return;
+  }
+  messageWindow.flashFrame(true);
+  usersWindow.focus();
+  messageWindow.flashFrame(false);
+});
+
+ipcMain.on('exitConversation', async event => {
+  if (!messageWindow) {
+    return;
+  }
+  messageWindow.destroy();
 });

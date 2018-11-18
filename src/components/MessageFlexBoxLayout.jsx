@@ -21,6 +21,8 @@ class MessageLayout extends Component {
     this.getMessages = this.getMessages.bind(this);
     this.conversationInitialized = this.conversationInitialized.bind(this);
     this.onNudgeClick = this.onNudgeClick.bind(this);
+    this.viewUserList = this.viewUserList.bind(this);
+    this.exitConversation = this.exitConversation.bind(this);
 
     onConverstationInitalized(this.conversationInitialized);
   }
@@ -63,7 +65,16 @@ class MessageLayout extends Component {
     ipcRenderer.send('nudgeWindow');
   }
 
+  viewUserList(event) {
+    ipcRenderer.send('viewUserList');
+  }
+
+  exitConversation(event) {
+    ipcRenderer.send('exitConversation');
+  }
+
   render() {
+    debugger;
     const recipient =
       this.props &&
       this.props.conversation &&
@@ -80,11 +91,14 @@ class MessageLayout extends Component {
             </button>
           </div>
           <div className="function-box">
-            <button className="btn btn-outline-success btn-block">
+            <button
+              className="btn btn-outline-success btn-block"
+              onClick={this.viewUserList}
+            >
               View Userlist
             </button>
           </div>
-          <div className="function-box">
+          <div className="function-box" onClick={this.exitConversation}>
             <button className="btn btn-outline-danger btn-block">
               Exit conversation
             </button>
