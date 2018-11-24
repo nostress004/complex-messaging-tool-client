@@ -10,7 +10,7 @@ const notifier = require('electron-notifications');
 // be closed automatically when the JavaScript object is garbage collected.
 let loginWindow, messageWindow, usersWindow;
 
-const isDevMode = process.execPath.match(/[\\/]electron/);
+const isDevMode = false; //process.execPath.match(/[\\/]electron/);
 const path = require('path');
 const url = require('url');
 
