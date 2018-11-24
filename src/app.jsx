@@ -3,6 +3,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ipcRenderer } from 'electron';
 
+import { emitMessageClientID } from './socket-io-client/messageToServer';
 import * as actions from './actions';
 import Users from './components/Users';
 import MessageFlexBoxLayout from './components/MessageFlexBoxLayout';
@@ -28,7 +29,7 @@ class App extends React.Component {
   }
 
   onCreateMessagesWindow(event, store) {
-    debugger;
+    emitMessageClientID(store);
     this.props.fetchMessageData(store);
   }
 

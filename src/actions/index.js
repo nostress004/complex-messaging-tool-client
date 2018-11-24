@@ -6,22 +6,26 @@ import {
   FETCH_FRIEND_SIGNOUT,
   FETCH_CONVERSATION,
   REMOVE_ONLINEUSER,
-  REMOVE_OFFLINEUSER
+  REMOVE_OFFLINEUSER,
+  FETCH_RECIPIENT
 } from './types';
 
 import { emitSignIn } from '../socket-io-client/messageToServer';
 //this is async instead of .then
-export const fetchMessageData = ({ auth, recipient }) => async dispatch => {
+export const fetchMessageData = ({
+  auth,
+  recipient,
+  conversation
+}) => async dispatch => {
+  debugger;
   dispatch({ type: FETCH_USER, payload: auth });
-  dispatch({ type: FETCH_CONVERSATION, payload: { recipient } });
+  dispatch({ type: FETCH_RECIPIENT, payload: { recipient } });
+  dispatch({ type: FETCH_CONVERSATION, payload: { conversation } });
 };
 
-export const fetchConversation = ({ messageHistory }) => {
-  dispatch({ type: FETCH_CONVERSATION, payload: messageHistory });
-};
-
-export const fetchMessage = ({ message }) => async dispatch => {
-  dispatch({ type: FETCH_MESSAGE, payload: message });
+export const fetchMessage = message => async dispatch => {
+  debugger;
+  dispatch({ type: FETCH_MESSAGE, payload: { message } });
 };
 
 export const fetchStoreData = ({ auth, users, messages }) => async dispatch => {

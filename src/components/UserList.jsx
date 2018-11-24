@@ -4,9 +4,18 @@ import { connect } from 'react-redux';
 import {
   onClients,
   onFriendSignIn,
-  onFriendSignOut
+  onFriendSignOut,
+  onUserListError,
+  emitConversationInit,
+  onNewConversationRequest,
+  onConverstationInitalized
 } from '../socket-io-client/messageToServer';
-import { fetchUsers, fetchFriendSignIn, fetchFriendSignOut } from '../actions';
+import {
+  fetchUsers,
+  fetchFriendSignIn,
+  fetchFriendSignOut,
+  fetchConversation
+} from '../actions';
 
 class UserList extends Component {
   constructor(props, context) {
@@ -15,7 +24,8 @@ class UserList extends Component {
     this.state = {
       availableOpen: true,
       offlineOpen: true,
-      updateDialog: ''
+      updateDialog: '',
+      messageRequest: null
     };
 
     this.getUsers = this.getUsers.bind(this);
@@ -23,21 +33,30 @@ class UserList extends Component {
     this.onMessageUserClick = this.onMessageUserClick.bind(this);
     this.friendSignIn = this.friendSignIn.bind(this);
     this.friendSignOut = this.friendSignOut.bind(this);
+    this.newConversationRequest = this.newConversationRequest.bind(this);
+    this.conversationInitialized = this.conversationInitialized.bind(this);
+    this.getMessageRequest = this.getMessageRequest.bind(this);
 
     onClients(this.props.fetchUsers);
     onFriendSignIn(this.friendSignIn);
     onFriendSignOut(this.friendSignOut);
+    onUserListError(this.setNotificationbar);
+    onNewConversationRequest(this.newConversationRequest);
+    onConverstationInitalized(this.conversationInitialized);
   }
 
   onMessageUserClick(event) {
-    var recipient = this.props.auth.contacts.find(c => {
-      return c._doc.email === event.target.getAttribute('value');
-    });
-    debugger;
-    if (this.props.auth || (recipient && recipient._doc)) {
-      ipcRenderer.send('messageUser', this.props.auth, this.props.auth);
+    var recipientEmail = event.target.getAttribute('value');
+
+    emitConversationInit(this.props.auth.googleID, recipientEmail);
+  }
+
+  conversationInitialized(recipient, conversation) {
+    if (this.props.auth && recipient && conversation) {
+      let store = { auth: this.props.auth, recipient, conversation };
+      ipcRenderer.send('messageUser', store);
     } else {
-      this.setNotificationbar('Could not open message window');
+      this.setNotificationbar('Could not open sendClientsmessage window');
     }
   }
 
@@ -63,6 +82,28 @@ class UserList extends Component {
       }.bind(this),
       2500
     );
+  }
+
+  newConversationRequest(fromClient, conversation) {
+    if (
+      confirm(
+        `${fromClient.name} wants to send you a message, do you accept it?`
+      )
+    ) {
+      alert('wohohohooh');
+      if (this.props.auth && fromClient && conversation) {
+        let store = {
+          auth: this.props.auth,
+          recipient: fromClient,
+          conversation
+        };
+        ipcRenderer.send('messageUser', store);
+      } else {
+        this.setNotificationbar('Could not open sendClientsmessage window');
+      }
+    } else {
+      alert('okay:(');
+    }
   }
 
   getUsers(status) {
@@ -137,10 +178,13 @@ class UserList extends Component {
     }
   }
 
+  getMessageRequest() {}
+
   render() {
     return (
       <div>
         {this.getUpdateDialog()}
+        {this.getMessageRequest()}
         <div
           className="rounded"
           onClick={() =>
@@ -203,5 +247,5 @@ function mapStateToProps({ userList, auth }) {
 
 export default connect(
   mapStateToProps,
-  { fetchUsers, fetchFriendSignIn, fetchFriendSignOut }
+  { fetchUsers, fetchFriendSignIn, fetchFriendSignOut, fetchConversation }
 )(UserList);

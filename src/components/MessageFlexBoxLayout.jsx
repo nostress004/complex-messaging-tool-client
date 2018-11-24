@@ -6,7 +6,6 @@ import UserCard from './UserCard';
 import UserPicture from './UserPicture';
 import Messages from './Messages';
 import TextArea from './TextArea';
-import { fetchConversation } from '../actions';
 import {
   emitConversationInit,
   onConverstationInitalized
@@ -19,12 +18,9 @@ class MessageLayout extends Component {
     this.state = { loadHistory: false };
     this.getPicture = this.getPicture.bind(this);
     this.getMessages = this.getMessages.bind(this);
-    this.conversationInitialized = this.conversationInitialized.bind(this);
     this.onNudgeClick = this.onNudgeClick.bind(this);
     this.viewUserList = this.viewUserList.bind(this);
     this.exitConversation = this.exitConversation.bind(this);
-
-    onConverstationInitalized(this.conversationInitialized);
   }
 
   getPicture() {
@@ -32,25 +28,6 @@ class MessageLayout extends Component {
       (this.props && this.props.auth && this.props.auth.photo) ||
       'https://c.tribune.com.pk/2017/03/1356933-msn-1489661345-517-640x480.jpg'
     );
-  }
-
-  componentDidUpdate() {
-    if (!this.props.conversation) {
-      return;
-    }
-    if (!this.props.conversation.recipient) {
-      return;
-    }
-
-    if (!this.props.conversation.messages) {
-      debugger;
-      emitConversationInit(this.props.conversation.recipient);
-    }
-  }
-
-  conversationInitialized(client) {
-    this.setState({ loadHistory: false });
-    this.props.fetchConversation(client);
   }
 
   getMessages() {
@@ -74,14 +51,13 @@ class MessageLayout extends Component {
   }
 
   render() {
-    debugger;
     const recipient =
       this.props &&
       this.props.conversation &&
       this.props.conversation.recipient;
     return (
       <div className="messages-main vertical-container">
-        <div className="function-container" style={{ padding: 10 }}>
+        <div className="function-container" style={{ padding: 10, margin: 0 }}>
           <div className="function-box">
             <button
               className="btn btn-outline-primary btn-block"
@@ -112,7 +88,7 @@ class MessageLayout extends Component {
               size={200}
             />
           </div>
-          <div className="input-box-2">
+          <div className="input-box-2" style={{ height: '50%' }}>
             <UserCard
               name={recipient && recipient.name}
               email={recipient && recipient.email}
@@ -134,7 +110,7 @@ class MessageLayout extends Component {
               size={300}
             />
           </div>
-          <div className="input-box-2" style={{ height: '60%' }}>
+          <div className="input-box-2" style={{ height: '30%' }}>
             <TextArea picture={false} />
           </div>
         </div>
@@ -149,5 +125,5 @@ function mapStateToProps({ auth, conversation }) {
 
 export default connect(
   mapStateToProps,
-  { fetchConversation }
+  {}
 )(MessageLayout);

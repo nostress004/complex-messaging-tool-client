@@ -10,7 +10,7 @@ const notifier = require('electron-notifications');
 // be closed automatically when the JavaScript object is garbage collected.
 let loginWindow, messageWindow, usersWindow;
 
-const isDevMode = false; //process.execPath.match(/[\\/]electron/);
+const isDevMode = process.execPath.match(/[\\/]electron/);
 const path = require('path');
 const url = require('url');
 
@@ -234,14 +234,11 @@ function initStore(store) {
 
 // IPC listeners
 
-ipcMain.on('messageUser', async (event, store, recipient) => {
+ipcMain.on('messageUser', async (event, store) => {
   if (!messageWindow) {
     createMessageWindow();
     setTimeout(() => {
-      messageWindow.webContents.send('createMessagesWindow', {
-        auth: store,
-        recipient
-      });
+      messageWindow.webContents.send('createMessagesWindow', store);
     }, 1000);
     setTimeout(() => {
       messageWindow.show();
@@ -250,10 +247,8 @@ ipcMain.on('messageUser', async (event, store, recipient) => {
 
   if (messageWindow) {
     messageWindow.show();
-    messageWindow.webContents.send('createMessagesWindow', {
-      auth: store,
-      recipient
-    });
+    console.log(store);
+    messageWindow.webContents.send('createMessagesWindow', store);
   }
 });
 
@@ -264,7 +259,7 @@ ipcMain.on('nudgeWindow', async event => {
   // [0] -> X ; [1] -> Y coords
   var position = messageWindow.getPosition();
 
-  var id = setInterval(frame, 50);
+  var id = setInterval(frame, 75);
   var width = 0;
   messageWindow.focus();
   messageWindow.flashFrame(true);
@@ -275,8 +270,9 @@ ipcMain.on('nudgeWindow', async event => {
       messageWindow.flashFrame(false);
     } else {
       width++;
-      let randomX = Math.floor(Math.random() * 1.1 * position[0]) + position[0];
-      let randomY = Math.floor(Math.random() * 1.1 * position[1]) + position[1];
+      let randomX =
+        Math.floor((Math.random() * position[0]) % 10) + position[0];
+      let randomY = Math.floor((Math.random() * position[1]) % 5) + position[1];
       messageWindow.setPosition(randomX, randomY, true);
     }
   }

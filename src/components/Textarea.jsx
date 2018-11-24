@@ -2,33 +2,46 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { messageToServer } from '../socket-io-client/messageToServer';
-import { Emoji, Picker } from 'emoji-mart';
+import { Emoji } from 'emoji-mart';
+import EmojiPicker from 'emoji-picker-react';
 
 class TextArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
       inputText: '',
-      textArea: true
+      textArea: true,
+      emojiCode: ''
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onEmojiPicker = this.onEmojiPicker.bind(this);
+    this.onEmojiPicked = this.onEmojiPicked.bind(this);
   }
 
   onSubmit(event) {
-    if (!this.state.inputText || this.state.inputText.length <= 0) {
+    if (
+      !this.state.inputText ||
+      this.state.inputText.length <= 0 ||
+      !this.props.auth ||
+      !this.props.conversation.recipient
+    ) {
       return;
     }
     const messageObj = {
       type: 'TEXT',
-      sender: this.props.auth.email,
+      sender: this.props.auth.name,
       content: this.state.inputText
     };
-    messageToServer(messageObj);
+
+    messageToServer(
+      this.props.auth,
+      this.props.conversation.recipient,
+      messageObj
+    );
     this.setState({ inputText: '' });
-    //this.props.callback();
+
     event.preventDefault();
   }
 
@@ -40,6 +53,27 @@ class TextArea extends Component {
     this.setState({ textArea: !this.state.textArea });
   }
 
+  onEmojiPicked(code, emojiObj) {
+    this.setState({ textArea: !this.state.textArea });
+    if (!this.props.auth || !this.props.conversation.recipient) {
+      return;
+    }
+    const messageObj = {
+      type: 'EMOJI',
+      sender: this.props.auth.name,
+      content: emojiObj.name
+    };
+
+    messageToServer(
+      this.props.auth,
+      this.props.conversation.recipient,
+      messageObj
+    );
+    this.setState({ inputText: '' });
+
+    event.preventDefault();
+  }
+
   getArea() {
     if (this.state && this.state.textArea === 'undefined') {
       return;
@@ -49,7 +83,7 @@ class TextArea extends Component {
       return (
         <input
           type="textarea"
-          rows="4"
+          multiple={true}
           value={this.state && this.state.inputText}
           onChange={this.handleChange}
           style={{ flexBasis: '75%' }}
@@ -58,7 +92,11 @@ class TextArea extends Component {
     } else if (!this.state.textArea) {
       return (
         <div>
-          <Picker perLine={4} style={{ flexBasis: '75%' }} />
+          <EmojiPicker
+            onEmojiClick={(e, v) => {
+              this.onEmojiPicked(e, v);
+            }}
+          />
         </div>
       );
     }
@@ -79,16 +117,16 @@ class TextArea extends Component {
           className="btn btn-outline-warning"
           onClick={this.onEmojiPicker}
           style={{
-            flexBasis: '5%',
-            padding: '0 5px 0 0',
-            margin: 0,
+            flexBasis: '2%',
+            padding: '5px 5px 0 5px',
+            margin: '0 0 0 5px',
             alignSelf: 'center',
-            height: '25%',
+            height: '50%',
             background: 'white'
           }}
         >
           <Emoji
-            emoji="smile"
+            emoji="slightly_smiling_face"
             set="emojione"
             size={24}
             style={{ alignSelf: 'center' }}
@@ -104,11 +142,12 @@ class TextArea extends Component {
           }}
         >
           {this.getArea()}
+
           <input
             className="btn btn-success"
             type="submit"
             value="Send"
-            style={{ flexBasis: '15%', height: '50%', alignSelf: 'center' }}
+            style={{ flexBasis: '15%', alignSelf: 'center' }}
           />
         </form>
       </div>

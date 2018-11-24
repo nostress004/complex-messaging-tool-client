@@ -10,8 +10,8 @@ const userSchema = new Schema({
   status: String,
   userClientID: String,
   messageClientID: String,
-  conversations: [conversationSchema]
+  conversations: [{ type: Schema.Types.ObjectId, ref: 'conversations' }],
+  contacts: [{ type: Schema.Types.ObjectId, ref: 'users' }]
 });
-userSchema.add({ contacts: [userSchema] });
 
 mongoose.model('users', userSchema);

@@ -1,13 +1,15 @@
 import { callbackify } from 'util';
 import socket from './connect';
 
-function messageToServer(message) {
-  socket.emit('messageToServer', message);
+function messageToServer(fromUser, toUser, message) {
+  socket.emit('message', { from: fromUser, to: toUser, message });
   console.log(`${message} message has been sent to the server`);
 }
 
 function messageToClient(callBack) {
-  socket.on('messageToClient', message => callBack(null, message));
+  socket.on('messageHandled', message => {
+    callBack(message);
+  });
   console.log('this is the messageToClient function');
 }
 
@@ -21,7 +23,6 @@ function onStatusUpdate(callBack) {
     // TODO: investigate why it wraps itself to an object
     callBack(null, status.status);
   });
-  console.log('status recieved');
 }
 
 // authentication
@@ -34,7 +35,6 @@ function onClients(callBack) {
   socket.on('sendClients', clients => {
     callBack(clients);
   });
-  console.log('clients recieved');
 }
 
 function onFriendSignIn(callBack) {
@@ -55,15 +55,33 @@ function emitAddFriend(email) {
   socket.emit('addFriend', email);
 }
 
-function emitConversationInit(recipient) {
-  debugger;
-  socket.emit('initConversation', recipient.email);
+function emitConversationInit(myGoogleID, recipient) {
+  if (myGoogleID && recipient) {
+    socket.emit('initConversation', myGoogleID, recipient);
+  }
+}
+
+function emitMessageClientID(store) {
+  if (store) {
+    socket.emit('messageClientID', store.auth);
+  }
 }
 
 function onConverstationInitalized(callBack) {
-  socket.on('conversationInitialized', messages => {
-    debugger;
-    callBack(messages);
+  socket.on('conversationInitialized', (conversation, recipient) => {
+    callBack(conversation, recipient);
+  });
+}
+
+function onUserListError(callBack) {
+  socket.on('errorMessage', errorMessage => {
+    callBack((errorMessage && errorMessage.message) || 'error');
+  });
+}
+
+function onNewConversationRequest(callBack) {
+  socket.on('newConversationRequest', (fromClient, conversation) => {
+    callBack(fromClient, conversation);
   });
 }
 
@@ -78,5 +96,8 @@ export {
   onFriendSignIn,
   onFriendSignOut,
   emitConversationInit,
-  onConverstationInitalized
+  onConverstationInitalized,
+  onUserListError,
+  onNewConversationRequest,
+  emitMessageClientID
 };

@@ -59,6 +59,7 @@
     "electron-notifications": "^1.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "emoji-mart": "^2.8.1",
+    "emoji-picker-react": "^2.1.1",
     "express": "^4.16.4",
     "immutability-helper": "^2.8.1",
     "mongoose": "^5.3.7",
@@ -70,6 +71,7 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-spinners": "^0.4.7",
+    "reactstrap": "^6.5.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "socket.io-client": "^2.1.1"
