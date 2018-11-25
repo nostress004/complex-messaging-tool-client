@@ -6,7 +6,7 @@ const { ipcRenderer } = require('electron');
 const keys = require('../config/keys');
 const User = mongoose.model('users');
 
-//user is what had been serialized from passport.use
+// user is what had been serialized from passport.use
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -32,7 +32,7 @@ passport.use(
 
         return done(null, extistingUser);
       }
-      //we dont have a user with this ID, make a new record
+      //we don't have a user with this ID, create a new record
       const user = await new User({
         googleID: profile.id,
         name: profile.displayName,

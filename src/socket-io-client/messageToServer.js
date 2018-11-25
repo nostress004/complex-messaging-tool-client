@@ -1,18 +1,6 @@
 import { callbackify } from 'util';
 import socket from './connect';
 
-function messageToServer(fromUser, toUser, message) {
-  socket.emit('message', { from: fromUser, to: toUser, message });
-  console.log(`${message} message has been sent to the server`);
-}
-
-function messageToClient(callBack) {
-  socket.on('messageHandled', message => {
-    callBack(message);
-  });
-  console.log('this is the messageToClient function');
-}
-
 function emitStatusUpdate(status) {
   socket.emit('updateStatus', status);
   console.log(`${status} has been sent to the server`);
@@ -49,21 +37,15 @@ function onFriendSignOut(callBack) {
   });
 }
 
-// update status
-
 function emitAddFriend(from, email) {
   socket.emit('addFriend', { from, email });
 }
 
+// conversation related functions
+
 function emitConversationInit(myGoogleID, recipient) {
   if (myGoogleID && recipient) {
     socket.emit('initConversation', myGoogleID, recipient);
-  }
-}
-
-function emitMessageClientID(store) {
-  if (store) {
-    socket.emit('messageClientID', store.auth);
   }
 }
 
@@ -73,15 +55,36 @@ function onConverstationInitalized(callBack) {
   });
 }
 
-function onUserListError(callBack) {
-  socket.on('errorMessage', errorMessage => {
-    callBack((errorMessage && errorMessage.message) || 'error');
-  });
-}
-
 function onNewConversationRequest(callBack) {
   socket.on('newConversationRequest', (fromClient, conversation) => {
     callBack(fromClient, conversation);
+  });
+}
+
+function emitMessageClientID(store) {
+  if (store) {
+    socket.emit('messageClientID', store.auth);
+  }
+}
+
+// messaging related functions
+
+function messageToServer(fromUser, toUser, message) {
+  socket.emit('message', { from: fromUser, to: toUser, message });
+  console.log(`${message.content} message has been sent to the server`);
+}
+
+function messageToClient(callBack) {
+  socket.on('messageHandled', message => {
+    callBack(message);
+  });
+}
+
+// error handling
+
+function onUserListError(callBack) {
+  socket.on('errorMessage', errorMessage => {
+    callBack((errorMessage && errorMessage.message) || 'error');
   });
 }
 
