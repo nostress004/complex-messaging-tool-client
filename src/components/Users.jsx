@@ -28,7 +28,7 @@ class Users extends Component {
     }
     this.setState({ addFriend: false });
 
-    emitAddFriend(this.input.value);
+    emitAddFriend(this.props.auth, this.input.value);
   }
 
   renderAddFriendComponent() {
@@ -89,6 +89,7 @@ class Users extends Component {
                     paddingRight: 0,
                     marginRight: 5
                   }}
+                  disabled={true}
                 />
                 {this.props.auth.name}
               </h4>

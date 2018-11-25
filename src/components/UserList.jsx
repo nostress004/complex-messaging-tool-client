@@ -129,6 +129,7 @@ class UserList extends Component {
               marginRight: 5,
               marginLeft: 5
             }}
+            disabled={true}
           />
           <img
             className="card-img-left col-4 profile_picture rounded"
@@ -145,8 +146,12 @@ class UserList extends Component {
 
           <b
             value={user.email}
-            style={{ cursor: 'pointer' }}
-            onClick={this.onMessageUserClick}
+            style={{
+              cursor: user.status === 'Offline' ? 'default' : 'pointer'
+            }}
+            onClick={
+              user.status === 'Offline' ? () => {} : this.onMessageUserClick
+            }
           >
             {user.name.split(' ')[0]}:{' '}
           </b>

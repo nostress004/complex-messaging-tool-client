@@ -51,8 +51,8 @@ function onFriendSignOut(callBack) {
 
 // update status
 
-function emitAddFriend(email) {
-  socket.emit('addFriend', email);
+function emitAddFriend(from, email) {
+  socket.emit('addFriend', { from, email });
 }
 
 function emitConversationInit(myGoogleID, recipient) {

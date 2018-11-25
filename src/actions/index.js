@@ -43,7 +43,7 @@ export const fetchUser = auth => async dispatch => {
 export const fetchUsers = users => async dispatch => {
   let onlineUsers = [],
     offlineUsers = [];
-
+  debugger;
   users.map(user => {
     if (user.status === 'Online') {
       onlineUsers.push(user);
