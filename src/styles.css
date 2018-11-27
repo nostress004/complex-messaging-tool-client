@@ -48,7 +48,8 @@ body {
 
   .message-height {
     height: 55vh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 
