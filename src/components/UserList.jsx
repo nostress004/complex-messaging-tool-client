@@ -48,7 +48,7 @@ class UserList extends Component {
   onMessageUserClick(event) {
     var recipientEmail = event.target.getAttribute('value');
 
-    emitConversationInit(this.props.auth.googleID, recipientEmail);
+    emitConversationInit(this.props.auth._id, recipientEmail);
   }
 
   conversationInitialized(recipient, conversation) {
