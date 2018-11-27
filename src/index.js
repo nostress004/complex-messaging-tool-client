@@ -267,6 +267,8 @@ ipcMain.on('nudgeWindow', async event => {
     if (width == 10) {
       clearInterval(id);
       messageWindow.setPosition(position[0], position[1], true);
+      messageWindow.center();
+      messageWindow.setSize(1280, 768, true);
       messageWindow.flashFrame(false);
     } else {
       width++;
@@ -274,6 +276,7 @@ ipcMain.on('nudgeWindow', async event => {
         Math.floor((Math.random() * position[0]) % 10) + position[0];
       let randomY = Math.floor((Math.random() * position[1]) % 5) + position[1];
       messageWindow.setPosition(randomX, randomY, true);
+      messageWindow.setSize(1280, 768, true);
     }
   }
 });

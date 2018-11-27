@@ -7,8 +7,8 @@ import UserPicture from './UserPicture';
 import Messages from './Messages';
 import TextArea from './TextArea';
 import {
-  emitConversationInit,
-  onConverstationInitalized
+  nudgeToClient,
+  nudgeToServer
 } from '../socket-io-client/messageToServer';
 
 class MessageLayout extends Component {
@@ -21,6 +21,7 @@ class MessageLayout extends Component {
     this.onNudgeClick = this.onNudgeClick.bind(this);
     this.viewUserList = this.viewUserList.bind(this);
     this.exitConversation = this.exitConversation.bind(this);
+    nudgeToClient(this.nudgeFromServer);
   }
 
   getPicture() {
@@ -38,8 +39,16 @@ class MessageLayout extends Component {
     }
   }
 
+  nudgeFromServer() {
+    ipcRenderer.send('nudgeWindow');
+  }
+
   onNudgeClick(event) {
     ipcRenderer.send('nudgeWindow');
+    if (!this.props.auth || !this.props.conversation.recipient) {
+      return;
+    }
+    nudgeToServer(this.props.auth, this.props.conversation.recipient);
   }
 
   viewUserList(event) {

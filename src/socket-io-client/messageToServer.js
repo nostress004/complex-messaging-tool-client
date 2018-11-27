@@ -80,6 +80,16 @@ function messageToClient(callBack) {
   });
 }
 
+function nudgeToServer(fromUser, toUser) {
+  socket.emit('nudgeToServer', { from: fromUser, to: toUser });
+}
+
+function nudgeToClient(callBack) {
+  socket.on('nudgeToClient', () => {
+    callBack();
+  });
+}
+
 // error handling
 
 function onUserListError(callBack) {
@@ -102,5 +112,7 @@ export {
   onConverstationInitalized,
   onUserListError,
   onNewConversationRequest,
-  emitMessageClientID
+  emitMessageClientID,
+  nudgeToServer,
+  nudgeToClient
 };
