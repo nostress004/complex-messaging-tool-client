@@ -17,14 +17,12 @@ export const fetchMessageData = ({
   recipient,
   conversation
 }) => async dispatch => {
-  debugger;
   dispatch({ type: FETCH_USER, payload: auth });
   dispatch({ type: FETCH_RECIPIENT, payload: { recipient } });
   dispatch({ type: FETCH_CONVERSATION, payload: { conversation } });
 };
 
 export const fetchMessage = message => async dispatch => {
-  debugger;
   dispatch({ type: FETCH_MESSAGE, payload: { message } });
 };
 
@@ -43,7 +41,6 @@ export const fetchUser = auth => async dispatch => {
 export const fetchUsers = users => async dispatch => {
   let onlineUsers = [],
     offlineUsers = [];
-  debugger;
   users.map(user => {
     if (user.status === 'Online') {
       onlineUsers.push(user);
