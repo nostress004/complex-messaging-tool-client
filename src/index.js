@@ -235,7 +235,9 @@ function initStore(store) {
 // IPC listeners
 
 ipcMain.on('messageUser', async (event, store) => {
+
   if (!messageWindow) {
+
     createMessageWindow();
     setTimeout(() => {
       messageWindow.webContents.send('createMessagesWindow', store);
@@ -247,7 +249,6 @@ ipcMain.on('messageUser', async (event, store) => {
 
   if (messageWindow) {
     messageWindow.show();
-    console.log(store);
     messageWindow.webContents.send('createMessagesWindow', store);
   }
 });
