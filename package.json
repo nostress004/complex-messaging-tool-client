@@ -61,7 +61,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "emoji-mart": "^2.8.1",
     "emoji-picker-react": "^2.1.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "immutability-helper": "^2.8.1",
     "mongoose": "^5.3.7",
     "passport": "^0.4.0",
